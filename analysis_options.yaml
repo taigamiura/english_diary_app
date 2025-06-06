@@ -1,0 +1,12 @@
+# Dart/Flutter 静的解析・Lintルール設定ファイル
+# 推奨: Flutter公式推奨ルール＋プロジェクト独自ルールを追加
+# 詳細: https://dart.dev/guides/language/analysis-options
+
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  # プロジェクト独自の追加・上書きルール
+  rules:
+    avoid_print: true           # print()の使用を禁止（logger等を推奨）
+    prefer_single_quotes: true  # 文字列リテラルはシングルクォート推奨
+    always_declare_return_types: true # 戻り値型を必ず明示
