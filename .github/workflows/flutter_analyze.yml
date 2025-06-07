@@ -1,10 +1,12 @@
-name: Flutter Analyze
+name: 🔍 Flutter Analyze
 
 on:
   pull_request:
     branches:
       - main
       - development
+      - 'feature/*'
+      - 'bug/*'
 
 jobs:
   analyze:
@@ -14,12 +16,14 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ vars.FLUTTER_VERSION }}
-      - run: flutter pub get
-      - id: analyze
+      - name: 📦 パッケージの取得
+        run: flutter pub get
+      - name: 🔎 コード解析の実行
+        id: analyze
         run: |
           set -o pipefail
           flutter analyze 2>&1 | tee analyze.log
-      - name: コメント（失敗時のみ）
+      - name: ❌ エラー報告（失敗時のみ）
         if: failure()
         uses: actions/github-script@v7
         with:
@@ -30,5 +34,13 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `:x: **flutter analyze に失敗しました**\n\`\`\`\n${log}\n\`\`\``
+              body: `## ❌ Flutter Analyze に失敗しました
+
+              以下のエラーが検出されました：
+              
+              \`\`\`
+              ${log}
+              \`\`\`
+              
+              🔧 これらの問題を修正してからPRを更新してください。`
             });
