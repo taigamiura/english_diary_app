@@ -10,3 +10,8 @@ linter:
     avoid_print: true           # print()の使用を禁止（logger等を推奨）
     prefer_single_quotes: true  # 文字列リテラルはシングルクォート推奨
     always_declare_return_types: true # 戻り値型を必ず明示
+
+analyzer:
+  exclude:
+    - pubspec.yaml
+    - pubspec.lock
