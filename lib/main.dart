@@ -1,6 +1,7 @@
 import 'package:english_diary_app/constants/app_constants.dart';
 import 'package:english_diary_app/constants/app_colors.dart';
 import 'package:english_diary_app/views/error_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -15,42 +16,48 @@ Future<void> main() async {
   try {
     await initializeDateFormatting('en');
     await dotenv.load(fileName: '.env');
+    final supabaseUrl = dotenv.env['SUPABASE_URL'];
+    final anonKey = dotenv.env['SUPABASE_ANON_KEY'];
+    if (supabaseUrl == null || anonKey == null) {
+      throw Exception('SUPABASE_URL or SUPABASE_ANON_KEY is not set in .env');
+    }
     await Supabase.initialize(
-      url: dotenv.env['SUPABASE_URL']!,
-      anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+      url: supabaseUrl,
+      anonKey: anonKey,
     );
-    await SentryFlutter.init(
+    if (!kDebugMode) {
+      final sentryDsn = dotenv.env['SENTRY_DSN'];
+      if (sentryDsn == null || sentryDsn.isEmpty) {
+        throw Exception('SENTRY_DSN is not set in .env');
+      }
+      await SentryFlutter.init(
       (options) {
-        options.dsn = dotenv.env['SENTRY_DSN']!;
-        // リクエストヘッダーやIPアドレスなどの個人情報を送信します。
+        options.dsn = sentryDsn;
         options.sendDefaultPii = true;
-        // tracesSampleRateを1.0に設定すると、全てのトランザクションをトレースします。
-        // 本番環境ではこの値を調整することを推奨します。
         options.tracesSampleRate = 0.2;
-        // プロファイリングのサンプリングレートはtracesSampleRateに依存します。
-        // 1.0に設定すると、全てのサンプリングされたトランザクションをプロファイルします。
         options.profilesSampleRate = 1.0;
-        // 自動セッション追跡を有効化
         options.enableAutoSessionTracking = true;
-        // デバッグログを有効化（開発時のみ推奨）
         options.debug = false;
-        // アプリのリリースバージョンを設定
         options.release = 'english_diary_app@${dotenv.env['APP_VERSION'] ?? 'unknown'}';
-        // アプリの環境（例: production, staging, development）
         options.environment = dotenv.env['APP_ENV'] ?? 'development';
-        // ユーザーのフィードバックを有効化
         options.enableUserInteractionBreadcrumbs = true;
-        // パフォーマンス監視のための最大イベント数
         options.maxBreadcrumbs = 100;
       },
       appRunner: () => runApp(
         ProviderScope(
-          child: SentryWidget(
-            child: MyApp(),
-          ),
+        child: SentryWidget(
+          child: MyApp(),
+        ),
         ),
       ),
-    );
+      );
+    } else {
+      runApp(
+      ProviderScope(
+        child: MyApp(),
+      ),
+      );
+    }
   } catch (e, stackTrace) {
     debugPrint('Initialization error: $e');
     if (dotenv.env['SENTRY_DSN'] != null && dotenv.env['SENTRY_DSN']!.isNotEmpty) {
