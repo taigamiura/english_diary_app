@@ -29,4 +29,5 @@ updates:
       - dependency-type: "all"
     labels:
       - "security"
+    open-pull-requests-limit: 5
     security-updates-only: true
