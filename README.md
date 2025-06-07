@@ -87,7 +87,7 @@ lib/
   ↓
 [Provider (StateNotifier<State>)]
   ↓
-[Repository] ←→ [Service] ←→ [API/Supabase]
+[Service] ←→ [Repository] ←→ [API/Supabase]
   ↑
 [Global Provider (Loading/Error)]
 ```
