@@ -1,0 +1,66 @@
+name: Create Pull Request on Push
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'bug/*'
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get recent commit messages
+        id: commits
+        run: |
+          echo "messages<<EOF" >> $GITHUB_OUTPUT
+          git log origin/development..HEAD --pretty=format:"- %h %s (%an)" | head -10 >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Check if there are commits to merge
+        id: check_commits
+        run: |
+          if [ -z "${{ steps.commits.outputs.messages }}" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.check_commits.outputs.skip == 'false'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: development
+          branch: ${{ github.ref_name }}
+          title: "🤖 【自動PR】${{ github.ref_name }} → development"
+          body: |
+            ![auto-pr](https://img.shields.io/badge/auto--pr-generated-blue)
+
+            ## 🤖 自動生成プルリクエスト
+            **このPRは `${{ github.ref_name }}` ブランチへのpushを検知して自動生成されました。**
+
+            ---
+            ### 📝 概要
+            このPRは `${{ github.ref_name }}` での最新の修正・追加内容を `development` ブランチへ反映するためのものです。
+
+            **📤 マージ元ブランチ:** `${{ github.ref_name }}`
+            **📥 マージ先ブランチ:** `development`
+
+            ---
+            ### 📋 直近のコミット一覧（最大10件）
+            ${{ steps.commits.outputs.messages }}
+
+            ---
+            ### 👀 レビュワーへのお願い
+            - ✅ 変更内容・コミット履歴を確認してください。
+            - 💬 必要に応じてコメントや追加修正をお願いします。
+            - 🔀 問題なければマージをお願いします。
+
+            ---
+            ### ⚠️ 注意事項
+            - 🤖 このPRは自動生成です。内容に不備がある場合は手動で修正・クローズしてください。
+            - 📢 マージ後、`development` ブランチに変更が反映されます。
+          labels: auto-pr
