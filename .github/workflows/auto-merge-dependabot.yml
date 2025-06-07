@@ -1,4 +1,4 @@
-name: Auto Merge Dependabot PRs
+name: 🤖 Auto Merge Dependabot PRs
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
       github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Enable auto-merge for Dependabot PR
+      - name: 🔄 Enable auto-merge for Dependabot PR
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
