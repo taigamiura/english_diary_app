@@ -13,6 +13,10 @@ on:
       - 'bug/*'
       - 'hotfix/*'
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   # 変更されたファイルを検出するジョブ
   detect-changes:
@@ -96,6 +100,13 @@ jobs:
       - name: 📦 依存関係の取得
         run: flutter pub get
         
+      - name: 🔧 .env ファイル作成
+        run: |
+          echo "# Test environment variables" > .env
+          echo "API_URL=https://test-api.example.com" >> .env
+          echo "DEBUG_MODE=true" >> .env
+          echo "Environment file created for testing"
+        
       - name: 🧪 クリティカルテスト実行
         run: |
           echo "🚨 クリティカルテストを実行中..."
@@ -137,6 +148,14 @@ jobs:
         if: matrix.test-category.condition == 'true'
         run: flutter pub get
         
+      - name: 🔧 .env ファイル作成
+        if: matrix.test-category.condition == 'true'
+        run: |
+          echo "# Test environment variables" > .env
+          echo "API_URL=https://test-api.example.com" >> .env
+          echo "DEBUG_MODE=true" >> .env
+          echo "Environment file created for testing"
+        
       - name: 🧪 ${{ matrix.test-category.name }} テスト実行
         if: matrix.test-category.condition == 'true'
         run: |
@@ -168,6 +187,13 @@ jobs:
       - name: 📦 依存関係の取得
         run: flutter pub get
         
+      - name: 🔧 .env ファイル作成
+        run: |
+          echo "# Test environment variables" > .env
+          echo "API_URL=https://test-api.example.com" >> .env
+          echo "DEBUG_MODE=true" >> .env
+          echo "Environment file created for testing"
+        
       - name: 🧪 標準テスト実行
         run: |
           echo "📋 標準テストを実行中..."
@@ -194,6 +220,13 @@ jobs:
           
       - name: 📦 依存関係の取得
         run: flutter pub get
+        
+      - name: 🔧 .env ファイル作成
+        run: |
+          echo "# Test environment variables" > .env
+          echo "API_URL=https://test-api.example.com" >> .env
+          echo "DEBUG_MODE=true" >> .env
+          echo "Environment file created for testing"
         
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -256,6 +289,13 @@ jobs:
       - name: 📦 依存関係の取得
         run: flutter pub get
         
+      - name: 🔧 .env ファイル作成
+        run: |
+          echo "# Test environment variables" > .env
+          echo "API_URL=https://test-api.example.com" >> .env
+          echo "DEBUG_MODE=true" >> .env
+          echo "Environment file created for testing"
+        
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
         continue-on-error: true
@@ -313,6 +353,7 @@ jobs:
     steps:
       - name: 📊 テスト結果サマリー
         uses: actions/github-script@v7
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         with:
           script: |
             const strategy = '${{ needs.detect-changes.outputs.test-strategy }}';
@@ -422,12 +463,18 @@ jobs:
             }
             
             if (context.payload.pull_request) {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: message
-              });
+              try {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: message
+                });
+                console.log('✅ コメントを投稿しました');
+              } catch (error) {
+                console.log('⚠️ コメント投稿をスキップしました (権限不足またはフォークPR)');
+                console.log(`Error: ${error.message}`);
+              }
             }
             
             console.log(message);
@@ -436,6 +483,17 @@ jobs:
         run: |
           echo "🔍 カバレッジ詳細分析を実行中..."
           
+          # .envファイルの存在確認（分析時には不要だが安全のため）
+          if [ ! -f ".env" ]; then
+            echo "⚠️ .envファイルが見つからないため作成します"
+            echo "API_URL=https://test-api.example.com" > .env
+          fi
+          
+          if [ ! -f "coverage/lcov.info" ]; then
+            echo "⚠️ カバレッジファイルが見つかりません。カバレッジ分析をスキップします。"
+            exit 0
+          fi
+          
           python3 -c "
           import re
           import sys
@@ -443,6 +501,10 @@ jobs:
           try:
               with open('coverage/lcov.info', 'r') as f:
                   content = f.read()
+              
+              if not content.strip():
+                  print('⚠️ カバレッジファイルが空です')
+                  sys.exit(0)
               
               # ファイル別カバレッジを抽出
               pattern = r'SF:(.*?)\nLF:(\d+)\nLH:(\d+)'
