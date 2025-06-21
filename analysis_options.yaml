@@ -15,3 +15,4 @@ analyzer:
   exclude:
     - pubspec.yaml
     - pubspec.lock
+    - test/** # テストコードは解析対象外

@@ -53,3 +53,5 @@ app.*.map.json
 migrate_working_dir/
 .env
 .tool-versions
+*REPORT.md
+coverage/*

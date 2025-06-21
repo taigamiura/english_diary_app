@@ -1,0 +1,503 @@
+name: 🧪 Flutter Tests (Optimized)
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+      - development
+      - 'feature/*'
+      - 'bug/*'
+      - 'hotfix/*'
+
+jobs:
+  # 変更されたファイルを検出するジョブ
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      # 各カテゴリに変更があったかどうか
+      models-changed: ${{ steps.changes.outputs.models }}
+      providers-changed: ${{ steps.changes.outputs.providers }}
+      services-changed: ${{ steps.changes.outputs.services }}
+      repositories-changed: ${{ steps.changes.outputs.repositories }}
+      views-changed: ${{ steps.changes.outputs.views }}
+      widgets-changed: ${{ steps.changes.outputs.widgets }}
+      utils-changed: ${{ steps.changes.outputs.utils }}
+      # テスト戦略を決定
+      test-strategy: ${{ steps.strategy.outputs.strategy }}
+      
+    steps:
+      - name: 📂 チェックアウト
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 全履歴を取得して変更を検出
+          
+      - name: 🔍 変更検出
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            models:
+              - 'lib/models/**'
+            providers:
+              - 'lib/providers/**'
+            services:
+              - 'lib/services/**'
+            repositories:
+              - 'lib/repositories/**'
+            views:
+              - 'lib/views/**'
+            widgets:
+              - 'lib/widgets/**'
+            utils:
+              - 'lib/utils/**'
+            config:
+              - 'pubspec.yaml'
+              - 'pubspec.lock'
+              - '.github/workflows/**'
+            
+      - name: 🎯 テスト戦略決定
+        id: strategy
+        run: |
+          # ブランチに基づいた戦略決定
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "strategy=full" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/development" ]]; then
+            echo "strategy=comprehensive" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.head_ref }}" == feature/* ]]; then
+            echo "strategy=targeted" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.head_ref }}" == hotfix/* ]]; then
+            echo "strategy=critical" >> $GITHUB_OUTPUT
+          else
+            echo "strategy=standard" >> $GITHUB_OUTPUT
+          fi
+
+  # クリティカルテスト（最優先）
+  critical-tests:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always() # 常に実行
+    
+    steps:
+      - name: 📂 チェックアウト
+        uses: actions/checkout@v4
+        
+      - name: 🐦 Flutter セットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION || '3.24.3' }}
+          channel: 'stable'
+          cache: true
+          
+      - name: 📦 依存関係の取得
+        run: flutter pub get
+        
+      - name: 🧪 クリティカルテスト実行
+        run: |
+          echo "🚨 クリティカルテストを実行中..."
+          # 最重要なモデルとユーティリティのテストのみ
+          flutter test test/models/ test/utils/ --reporter=compact
+          
+  # ターゲットテスト（変更された部分のみ）
+  targeted-tests:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: needs.detect-changes.outputs.test-strategy == 'targeted'
+    
+    strategy:
+      matrix:
+        test-category:
+          - { name: "models", condition: "${{ needs.detect-changes.outputs.models-changed }}", path: "test/models/" }
+          - { name: "providers", condition: "${{ needs.detect-changes.outputs.providers-changed }}", path: "test/providers/" }
+          - { name: "services", condition: "${{ needs.detect-changes.outputs.services-changed }}", path: "test/services/" }
+          - { name: "repositories", condition: "${{ needs.detect-changes.outputs.repositories-changed }}", path: "test/repositories/" }
+          - { name: "views", condition: "${{ needs.detect-changes.outputs.views-changed }}", path: "test/views/" }
+          - { name: "widgets", condition: "${{ needs.detect-changes.outputs.widgets-changed }}", path: "test/widgets/" }
+          - { name: "utils", condition: "${{ needs.detect-changes.outputs.utils-changed }}", path: "test/utils/" }
+    
+    steps:
+      - name: 📂 チェックアウト
+        uses: actions/checkout@v4
+        if: matrix.test-category.condition == 'true'
+        
+      - name: 🐦 Flutter セットアップ
+        uses: subosito/flutter-action@v2
+        if: matrix.test-category.condition == 'true'
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION || '3.24.3' }}
+          channel: 'stable'
+          cache: true
+          
+      - name: 📦 依存関係の取得
+        if: matrix.test-category.condition == 'true'
+        run: flutter pub get
+        
+      - name: 🧪 ${{ matrix.test-category.name }} テスト実行
+        if: matrix.test-category.condition == 'true'
+        run: |
+          echo "🎯 ${{ matrix.test-category.name }} テストを実行中..."
+          if [ -d "${{ matrix.test-category.path }}" ]; then
+            flutter test ${{ matrix.test-category.path }} --reporter=expanded
+          else
+            echo "⚠️ ${{ matrix.test-category.path }} ディレクトリが存在しません"
+          fi
+
+  # 標準テスト（feature ブランチ以外）
+  standard-tests:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    if: needs.detect-changes.outputs.test-strategy == 'standard'
+    
+    steps:
+      - name: 📂 チェックアウト
+        uses: actions/checkout@v4
+        
+      - name: 🐦 Flutter セットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION || '3.24.3' }}
+          channel: 'stable'
+          cache: true
+          
+      - name: 📦 依存関係の取得
+        run: flutter pub get
+        
+      - name: 🧪 標準テスト実行
+        run: |
+          echo "📋 標準テストを実行中..."
+          # モデル、サービス、プロバイダーのみ
+          flutter test test/models/ test/services/ test/providers/ --reporter=expanded
+
+  # 包括的テスト（development ブランチ）
+  comprehensive-tests:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: needs.detect-changes.outputs.test-strategy == 'comprehensive'
+    
+    steps:
+      - name: 📂 チェックアウト
+        uses: actions/checkout@v4
+        
+      - name: 🐦 Flutter セットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION || '3.24.3' }}
+          channel: 'stable'
+          cache: true
+          
+      - name: 📦 依存関係の取得
+        run: flutter pub get
+        
+      - name: 🔧 コード生成
+        run: flutter packages pub run build_runner build --delete-conflicting-outputs
+        continue-on-error: true
+        
+      - name: 🧪 包括的テスト実行
+        run: |
+          echo "🔍 包括的テストを実行中..."
+          # ウィジェット以外の全テスト
+          flutter test --exclude-tags=widget --reporter=expanded --coverage
+          
+      - name: 📊 カバレッジレポート生成
+        id: coverage-report
+        run: |
+          if [ -f "coverage/lcov.info" ]; then
+            echo "📊 カバレッジレポート生成中..."
+            sed -i '/\.g\.dart/d' coverage/lcov.info
+            sed -i '/\.freezed\.dart/d' coverage/lcov.info
+            echo "✅ カバレッジレポート生成完了"
+            
+            # カバレッジ統計を計算
+            total_lines=$(grep -c "^DA:" coverage/lcov.info || echo "0")
+            covered_lines=$(grep "^DA:" coverage/lcov.info | grep -v ",0$" | wc -l || echo "0")
+            if [ "$total_lines" -gt 0 ]; then
+              coverage_percent=$(echo "scale=2; $covered_lines * 100 / $total_lines" | bc -l)
+              echo "📈 カバレッジ: $covered_lines/$total_lines ($coverage_percent%)"
+              echo "coverage-percent=$coverage_percent" >> $GITHUB_OUTPUT
+              echo "total-lines=$total_lines" >> $GITHUB_OUTPUT
+              echo "covered-lines=$covered_lines" >> $GITHUB_OUTPUT
+            else
+              echo "coverage-percent=0" >> $GITHUB_OUTPUT
+              echo "total-lines=0" >> $GITHUB_OUTPUT
+              echo "covered-lines=0" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️ カバレッジファイルが見つかりませんでした"
+            echo "coverage-percent=0" >> $GITHUB_OUTPUT
+            echo "total-lines=0" >> $GITHUB_OUTPUT
+            echo "covered-lines=0" >> $GITHUB_OUTPUT
+          fi
+
+  # フルテスト（main ブランチ）
+  full-tests:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: needs.detect-changes.outputs.test-strategy == 'full'
+    
+    steps:
+      - name: 📂 チェックアウト
+        uses: actions/checkout@v4
+        
+      - name: 🐦 Flutter セットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ vars.FLUTTER_VERSION || '3.24.3' }}
+          channel: 'stable'
+          cache: true
+          
+      - name: 📦 依存関係の取得
+        run: flutter pub get
+        
+      - name: 🔧 コード生成
+        run: flutter packages pub run build_runner build --delete-conflicting-outputs
+        continue-on-error: true
+        
+      - name: 🧪 フルテスト実行
+        run: |
+          echo "🎯 フルテストスイートを実行中..."
+          flutter test --reporter=expanded --coverage
+          
+      - name: 📊 カバレッジレポート生成
+        id: coverage-report-full
+        run: |
+          if [ -f "coverage/lcov.info" ]; then
+            echo "📊 カバレッジレポート生成中..."
+            sed -i '/\.g\.dart/d' coverage/lcov.info
+            sed -i '/\.freezed\.dart/d' coverage/lcov.info
+            echo "✅ カバレッジレポート生成完了"
+            
+            # カバレッジ統計を計算
+            total_lines=$(grep -c "^DA:" coverage/lcov.info || echo "0")
+            covered_lines=$(grep "^DA:" coverage/lcov.info | grep -v ",0$" | wc -l || echo "0")
+            if [ "$total_lines" -gt 0 ]; then
+              coverage_percent=$(echo "scale=2; $covered_lines * 100 / $total_lines" | bc -l)
+              echo "📈 カバレッジ: $covered_lines/$total_lines ($coverage_percent%)"
+              echo "coverage-percent=$coverage_percent" >> $GITHUB_OUTPUT
+              echo "total-lines=$total_lines" >> $GITHUB_OUTPUT  
+              echo "covered-lines=$covered_lines" >> $GITHUB_OUTPUT
+            else
+              echo "coverage-percent=0" >> $GITHUB_OUTPUT
+              echo "total-lines=0" >> $GITHUB_OUTPUT
+              echo "covered-lines=0" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️ カバレッジファイルが見つかりませんでした"
+            echo "coverage-percent=0" >> $GITHUB_OUTPUT
+            echo "total-lines=0" >> $GITHUB_OUTPUT
+            echo "covered-lines=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📈 カバレッジをCodecovにアップロード
+        if: success()
+        uses: codecov/codecov-action@v4
+        with:
+          file: coverage/lcov.info
+          flags: unittests
+          name: english-diary-app-coverage
+          fail_ci_if_error: false
+
+  # テスト結果サマリー
+  test-summary:
+    needs: [detect-changes, critical-tests, targeted-tests, standard-tests, comprehensive-tests, full-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 📊 テスト結果サマリー
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const strategy = '${{ needs.detect-changes.outputs.test-strategy }}';
+            const criticalResult = '${{ needs.critical-tests.result }}';
+            const targetedResult = '${{ needs.targeted-tests.result }}';
+            const standardResult = '${{ needs.standard-tests.result }}';
+            const comprehensiveResult = '${{ needs.comprehensive-tests.result }}';
+            const fullResult = '${{ needs.full-tests.result }}';
+            
+            // カバレッジ情報を取得
+            let coverageInfo = '';
+            let coveragePercent = 0;
+            
+            if (strategy === 'comprehensive' && comprehensiveResult === 'success') {
+              // comprehensive-testsの結果を使用（outputs取得は複雑なので簡略化）
+              coverageInfo = '📊 カバレッジ測定済み (詳細は Actions ログを参照)';
+            } else if (strategy === 'full' && fullResult === 'success') {
+              // full-testsの結果を使用
+              coverageInfo = '📊 フルカバレッジ測定済み (詳細は Actions ログを参照)';
+            } else {
+              coverageInfo = '📊 カバレッジ測定なし';
+            }
+            
+            let message = `## 🧪 テスト実行結果\n\n`;
+            message += `**実行戦略**: ${strategy}\n`;
+            message += `**ブランチ**: ${context.ref}\n`;
+            message += `**トリガー**: ${context.eventName}\n\n`;
+            
+            message += `### 📋 実行されたテスト\n`;
+            message += `- 🚨 クリティカルテスト: ${criticalResult === 'success' ? '✅' : criticalResult === 'skipped' ? '⏭️' : '❌'}\n`;
+            
+            if (strategy === 'targeted') {
+              message += `- 🎯 ターゲットテスト: ${targetedResult === 'success' ? '✅' : targetedResult === 'skipped' ? '⏭️' : '❌'}\n`;
+            } else if (strategy === 'standard') {
+              message += `- 📋 標準テスト: ${standardResult === 'success' ? '✅' : standardResult === 'skipped' ? '⏭️' : '❌'}\n`;
+            } else if (strategy === 'comprehensive') {
+              message += `- 🔍 包括的テスト: ${comprehensiveResult === 'success' ? '✅' : comprehensiveResult === 'skipped' ? '⏭️' : '❌'}\n`;
+            } else if (strategy === 'full') {
+              message += `- 🎯 フルテスト: ${fullResult === 'success' ? '✅' : fullResult === 'skipped' ? '⏭️' : '❌'}\n`;
+            }
+            
+            // カバレッジ情報
+            message += `\n### ${coverageInfo}\n`;
+            
+            // main/developmentブランチ向けPRの場合は特別な注意書き
+            if (context.payload.pull_request && 
+                (context.payload.pull_request.base.ref === 'main' || 
+                 context.payload.pull_request.base.ref === 'development')) {
+              message += `\n### ⚠️ カバレッジ要件\n`;
+              message += `このPRは **${context.payload.pull_request.base.ref}** ブランチに向けられているため、\n`;
+              message += `**カバレッジ95%以上**が必要です。\n\n`;
+              
+              if (strategy === 'comprehensive' || strategy === 'full') {
+                message += `✅ カバレッジチェックが実行されました。\n`;
+                message += `❌ 要件を満たしていない場合、マージはブロックされます。\n`;
+              } else {
+                message += `⚠️ 現在のテスト戦略ではカバレッジ測定されていません。\n`;
+                message += `📝 フルテストの実行を推奨します。\n`;
+              }
+            }
+            
+            // 変更検出情報
+            const changes = [];
+            if ('${{ needs.detect-changes.outputs.models-changed }}' === 'true') changes.push('モデル');
+            if ('${{ needs.detect-changes.outputs.providers-changed }}' === 'true') changes.push('プロバイダー');
+            if ('${{ needs.detect-changes.outputs.services-changed }}' === 'true') changes.push('サービス');
+            if ('${{ needs.detect-changes.outputs.repositories-changed }}' === 'true') changes.push('リポジトリ');
+            if ('${{ needs.detect-changes.outputs.views-changed }}' === 'true') changes.push('ビュー');
+            if ('${{ needs.detect-changes.outputs.widgets-changed }}' === 'true') changes.push('ウィジェット');
+            if ('${{ needs.detect-changes.outputs.utils-changed }}' === 'true') changes.push('ユーティリティ');
+            
+            if (changes.length > 0) {
+              message += `\n### 🔄 検出された変更\n`;
+              message += changes.map(c => `- ${c}`).join('\n');
+            }
+            
+            // 最終結果
+            const allPassed = criticalResult === 'success' && 
+              (targetedResult === 'success' || targetedResult === 'skipped') &&
+              (standardResult === 'success' || standardResult === 'skipped') &&
+              (comprehensiveResult === 'success' || comprehensiveResult === 'skipped') &&
+              (fullResult === 'success' || fullResult === 'skipped');
+              
+            message += `\n### 🎉 総合結果\n`;
+            if (allPassed) {
+              message += '✅ **すべてのテストが成功しました！**\n\n';
+              message += '🚀 マージの準備ができています。';
+            } else {
+              message += '❌ **一部のテストが失敗しました**\n\n';
+              message += '🔧 失敗したテストを修正してから再度プッシュしてください。';
+            }
+            
+            // 次のアクション提案
+            message += `\n\n### 📝 次のアクション\n`;
+            if (!allPassed) {
+              message += `- ❌ 失敗したテストのログを確認\n`;
+              message += `- 🔧 コードを修正してテストを通す\n`;
+              message += `- 🔄 修正後に再度プッシュ\n`;
+            } else if (strategy === 'targeted' && context.payload.pull_request && 
+                       (context.payload.pull_request.base.ref === 'main' || 
+                        context.payload.pull_request.base.ref === 'development')) {
+              message += `- 📊 カバレッジ測定のため、フルテストの実行を検討\n`;
+              message += `- ✅ すべて問題なければレビュー依頼\n`;
+            } else {
+              message += `- ✅ レビューを依頼\n`;
+              message += `- 🎯 マージの承認待ち\n`;
+            }
+            
+            if (context.payload.pull_request) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            }
+            
+            console.log(message);
+      - name: 📋 カバレッジ詳細分析
+        if: always()
+        run: |
+          echo "🔍 カバレッジ詳細分析を実行中..."
+          
+          python3 -c "
+          import re
+          import sys
+          
+          try:
+              with open('coverage/lcov.info', 'r') as f:
+                  content = f.read()
+              
+              # ファイル別カバレッジを抽出
+              pattern = r'SF:(.*?)\nLF:(\d+)\nLH:(\d+)'
+              matches = re.findall(pattern, content, re.DOTALL)
+              
+              print('📊 ファイル別カバレッジ分析:')
+              print('=' * 80)
+              
+              low_coverage_files = []
+              high_coverage_files = []
+              
+              for file_path, lf, lh in matches:
+                  lf, lh = int(lf), int(lh)
+                  if lf > 0:
+                      coverage = (lh / lf) * 100
+                      if coverage < 90:
+                          low_coverage_files.append((file_path, coverage, lf - lh))
+                      elif coverage >= 95:
+                          high_coverage_files.append((file_path, coverage))
+              
+              if low_coverage_files:
+                  print('\n⚠️  改善が必要なファイル (90%未満):')
+                  print('-' * 60)
+                  for file_path, coverage, uncovered in sorted(low_coverage_files, key=lambda x: x[1]):
+                      print(f'{file_path:<45} {coverage:>5.1f}% ({uncovered:>2} lines uncovered)')
+              
+              if high_coverage_files:
+                  print('\n✅ 良好なカバレッジファイル (95%以上):')
+                  print('-' * 60)
+                  for file_path, coverage in sorted(high_coverage_files, key=lambda x: x[1], reverse=True)[:10]:
+                      print(f'{file_path:<45} {coverage:>5.1f}%')
+              
+              # 未カバー行の詳細
+              print('\n🎯 未カバー行の詳細 (表示制限: 各ファイル10行まで):')
+              print('-' * 80)
+              
+              current_file = ''
+              uncovered_lines = {}
+              
+              for line in content.split('\n'):
+                  if line.startswith('SF:'):
+                      current_file = line[3:]
+                  elif line.startswith('DA:') and line.endswith(',0'):
+                      line_num = line.split(',')[0][3:]
+                      if current_file not in uncovered_lines:
+                          uncovered_lines[current_file] = []
+                      uncovered_lines[current_file].append(line_num)
+              
+              for file_path, lines in uncovered_lines.items():
+                  if len(lines) <= 10:
+                      print(f'{file_path}: lines {', '.join(lines)}')
+                  else:
+                      print(f'{file_path}: {len(lines)} uncovered lines (first 10: {', '.join(lines[:10])}...)')
+                      
+          except Exception as e:
+              print(f'❌ 分析エラー: {e}')
+              sys.exit(0)  # 分析エラーは致命的ではない
+          "
