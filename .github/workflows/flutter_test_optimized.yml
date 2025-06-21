@@ -7,7 +7,7 @@ on:
       - development
   pull_request:
     branches:
-      - main
+      -          echo "📁 作成されたファイルを確認:"main
       - development
       - 'feature/*'
       - 'bug/*'
@@ -110,10 +110,32 @@ jobs:
       - name: 🔧 .env ファイル作成
         run: |
           echo "📝 .envファイルを作成中..."
-          cp .env.example .env
-          echo "✅ .env.exampleから.envファイルを作成しました"
-          echo "📋 作成された.envファイルの内容:"
-          head -5 .env
+          echo "🔍 ワークスペース内容を確認:"
+          ls -la
+          echo "🔍 .envファイル関連:"
+          ls -la .env* || echo "⚠️ .envファイルが見つかりません"
+          if [ -f ".env.example" ]; then
+            echo "✅ .env.exampleが見つかりました。コピーします..."
+            cp .env.example .env
+            echo "📋 作成された.envファイルの内容:"
+            head -5 .env
+          else
+            echo "⚠️ .env.exampleが見つかりません。基本的な.envファイルを作成します..."
+            echo "# Test Environment Variables for GitHub Actions" > .env
+            echo "SUPABASE_URL=https://test-project.supabase.co" >> .env
+            echo "SUPABASE_ANON_KEY=test_anon_key_for_ci" >> .env
+            echo "SENTRY_DSN=https://test@sentry.io/test" >> .env
+            echo "GOOGLE_IOS_CLIENT_ID=test-ios.apps.googleusercontent.com" >> .env
+            echo "GOOGLE_WEB_CLIENT_ID=test-web.apps.googleusercontent.com" >> .env
+            echo "DEV_USER_EMAIL=test@example.com" >> .env
+            echo "DEV_USER_PASSWORD=test_password" >> .env
+            echo "DEBUG_MODE=true" >> .env
+            echo "LOG_LEVEL=debug" >> .env
+            echo "API_TIMEOUT=30000" >> .env
+            echo "✅ テスト用.envファイルを作成しました"
+          fi
+          echo "� 作成されたファイルを確認:"
+          ls -la .env
         
       - name: 🧪 クリティカルテスト実行
         timeout-minutes: 3
@@ -161,8 +183,19 @@ jobs:
         if: matrix.test-category.condition == 'true'
         run: |
           echo "📝 .envファイルを作成中..."
-          cp .env.example .env
-          echo "✅ .env.exampleから.envファイルを作成しました"
+          echo "🔍 ワークスペース内容を確認:"
+          ls -la .env* || echo "⚠️ .envファイルが見つかりません"
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            echo "✅ .env.exampleから.envファイルを作成しました"
+          else
+            echo "⚠️ .env.exampleが見つかりません。基本的な.envファイルを作成します..."
+            echo "# Test Environment Variables for GitHub Actions" > .env
+            echo "SUPABASE_URL=https://test-project.supabase.co" >> .env
+            echo "SUPABASE_ANON_KEY=test_anon_key_for_ci" >> .env
+            echo "DEBUG_MODE=true" >> .env
+            echo "✅ テスト用.envファイルを作成しました"
+          fi
         
       - name: 🧪 ${{ matrix.test-category.name }} テスト実行
         if: matrix.test-category.condition == 'true'
@@ -199,8 +232,24 @@ jobs:
       - name: 🔧 .env ファイル作成
         run: |
           echo "📝 .envファイルを作成中..."
-          cp .env.example .env
-          echo "✅ .env.exampleから.envファイルを作成しました"
+          echo "🔍 ワークスペース内容を確認:"
+          ls -la .env* || echo "⚠️ .envファイルが見つかりません"
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            echo "✅ .env.exampleから.envファイルを作成しました"
+          else
+            echo "⚠️ .env.exampleが見つかりません。基本的な.envファイルを作成します..."
+            echo "# Test Environment Variables for GitHub Actions" > .env
+            echo "SUPABASE_URL=https://test-project.supabase.co" >> .env
+            echo "SUPABASE_ANON_KEY=test_anon_key_for_ci" >> .env
+            echo "SENTRY_DSN=https://test@sentry.io/test" >> .env
+            echo "GOOGLE_IOS_CLIENT_ID=test-ios.apps.googleusercontent.com" >> .env
+            echo "GOOGLE_WEB_CLIENT_ID=test-web.apps.googleusercontent.com" >> .env
+            echo "DEV_USER_EMAIL=test@example.com" >> .env
+            echo "DEV_USER_PASSWORD=test_password" >> .env
+            echo "DEBUG_MODE=true" >> .env
+            echo "✅ テスト用.envファイルを作成しました"
+          fi
         
       - name: 🧪 標準テスト実行
         timeout-minutes: 10
@@ -233,8 +282,24 @@ jobs:
       - name: 🔧 .env ファイル作成
         run: |
           echo "📝 .envファイルを作成中..."
-          cp .env.example .env
-          echo "✅ .env.exampleから.envファイルを作成しました"
+          echo "🔍 ワークスペース内容を確認:"
+          ls -la .env* || echo "⚠️ .envファイルが見つかりません"
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            echo "✅ .env.exampleから.envファイルを作成しました"
+          else
+            echo "⚠️ .env.exampleが見つかりません。基本的な.envファイルを作成します..."
+            echo "# Test Environment Variables for GitHub Actions" > .env
+            echo "SUPABASE_URL=https://test-project.supabase.co" >> .env
+            echo "SUPABASE_ANON_KEY=test_anon_key_for_ci" >> .env
+            echo "SENTRY_DSN=https://test@sentry.io/test" >> .env
+            echo "GOOGLE_IOS_CLIENT_ID=test-ios.apps.googleusercontent.com" >> .env
+            echo "GOOGLE_WEB_CLIENT_ID=test-web.apps.googleusercontent.com" >> .env
+            echo "DEV_USER_EMAIL=test@example.com" >> .env
+            echo "DEV_USER_PASSWORD=test_password" >> .env
+            echo "DEBUG_MODE=true" >> .env
+            echo "✅ テスト用.envファイルを作成しました"
+          fi
         
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -301,8 +366,24 @@ jobs:
       - name: 🔧 .env ファイル作成
         run: |
           echo "📝 .envファイルを作成中..."
-          cp .env.example .env
-          echo "✅ .env.exampleから.envファイルを作成しました"
+          echo "🔍 ワークスペース内容を確認:"
+          ls -la .env* || echo "⚠️ .envファイルが見つかりません"
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            echo "✅ .env.exampleから.envファイルを作成しました"
+          else
+            echo "⚠️ .env.exampleが見つかりません。基本的な.envファイルを作成します..."
+            echo "# Test Environment Variables for GitHub Actions" > .env
+            echo "SUPABASE_URL=https://test-project.supabase.co" >> .env
+            echo "SUPABASE_ANON_KEY=test_anon_key_for_ci" >> .env
+            echo "SENTRY_DSN=https://test@sentry.io/test" >> .env
+            echo "GOOGLE_IOS_CLIENT_ID=test-ios.apps.googleusercontent.com" >> .env
+            echo "GOOGLE_WEB_CLIENT_ID=test-web.apps.googleusercontent.com" >> .env
+            echo "DEV_USER_EMAIL=test@example.com" >> .env
+            echo "DEV_USER_PASSWORD=test_password" >> .env
+            echo "DEBUG_MODE=true" >> .env
+            echo "✅ テスト用.envファイルを作成しました"
+          fi
         
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -495,7 +576,16 @@ jobs:
           # .envファイルの存在確認（分析時には不要だが安全のため）
           if [ ! -f ".env" ]; then
             echo "⚠️ .envファイルが見つからないため作成します"
-            cp .env.example .env
+            if [ -f ".env.example" ]; then
+              cp .env.example .env
+              echo "✅ .env.exampleから.envファイルを作成しました"
+            else
+              echo "# Test Environment Variables for GitHub Actions" > .env
+              echo "SUPABASE_URL=https://test-project.supabase.co" >> .env
+              echo "SUPABASE_ANON_KEY=test_anon_key_for_ci" >> .env
+              echo "DEBUG_MODE=true" >> .env
+              echo "✅ テスト用.envファイルを作成しました"
+            fi
           fi
           
           if [ ! -f "coverage/lcov.info" ]; then
