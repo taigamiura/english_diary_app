@@ -100,24 +100,27 @@ jobs:
       - name: 📦 依存関係の取得
         run: flutter pub get
         
+      - name: 🧹 テスト環境準備
+        run: |
+          echo "🧹 テスト環境を準備中..."
+          flutter clean
+          flutter pub get
+          echo "✅ 環境準備完了"
+        
       - name: 🔧 .env ファイル作成
         run: |
-          if [ -f ".env.example" ]; then
-            echo "📝 .env.exampleから.envファイルを作成中..."
-            cp .env.example .env
-          else
-            echo "📝 テスト用.envファイルを作成中..."
-            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
-            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
-            echo "DEBUG_MODE=true" >> .env
-          fi
-          echo "✅ .envファイルが作成されました"
+          echo "📝 .envファイルを作成中..."
+          cp .env.example .env
+          echo "✅ .env.exampleから.envファイルを作成しました"
+          echo "📋 作成された.envファイルの内容:"
+          head -5 .env
         
       - name: 🧪 クリティカルテスト実行
+        timeout-minutes: 3
         run: |
           echo "🚨 クリティカルテストを実行中..."
           # 最重要なモデルとユーティリティのテストのみ
-          flutter test test/models/ test/utils/ --reporter=compact
+          flutter test test/models/ test/utils/ --reporter=compact --timeout=2m
           
   # ターゲットテスト（変更された部分のみ）
   targeted-tests:
@@ -157,23 +160,17 @@ jobs:
       - name: 🔧 .env ファイル作成
         if: matrix.test-category.condition == 'true'
         run: |
-          if [ -f ".env.example" ]; then
-            echo "📝 .env.exampleから.envファイルを作成中..."
-            cp .env.example .env
-          else
-            echo "📝 テスト用.envファイルを作成中..."
-            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
-            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
-            echo "DEBUG_MODE=true" >> .env
-          fi
-          echo "✅ .envファイルが作成されました"
+          echo "📝 .envファイルを作成中..."
+          cp .env.example .env
+          echo "✅ .env.exampleから.envファイルを作成しました"
         
       - name: 🧪 ${{ matrix.test-category.name }} テスト実行
         if: matrix.test-category.condition == 'true'
+        timeout-minutes: 8
         run: |
           echo "🎯 ${{ matrix.test-category.name }} テストを実行中..."
           if [ -d "${{ matrix.test-category.path }}" ]; then
-            flutter test ${{ matrix.test-category.path }} --reporter=expanded
+            flutter test ${{ matrix.test-category.path }} --reporter=expanded --timeout=5m
           else
             echo "⚠️ ${{ matrix.test-category.path }} ディレクトリが存在しません"
           fi
@@ -201,22 +198,16 @@ jobs:
         
       - name: 🔧 .env ファイル作成
         run: |
-          if [ -f ".env.example" ]; then
-            echo "📝 .env.exampleから.envファイルを作成中..."
-            cp .env.example .env
-          else
-            echo "📝 テスト用.envファイルを作成中..."
-            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
-            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
-            echo "DEBUG_MODE=true" >> .env
-          fi
-          echo "✅ .envファイルが作成されました"
+          echo "📝 .envファイルを作成中..."
+          cp .env.example .env
+          echo "✅ .env.exampleから.envファイルを作成しました"
         
       - name: 🧪 標準テスト実行
+        timeout-minutes: 10
         run: |
           echo "📋 標準テストを実行中..."
           # モデル、サービス、プロバイダーのみ
-          flutter test test/models/ test/services/ test/providers/ --reporter=expanded
+          flutter test test/models/ test/services/ test/providers/ --reporter=expanded --timeout=8m
 
   # 包括的テスト（development ブランチ）
   comprehensive-tests:
@@ -241,26 +232,20 @@ jobs:
         
       - name: 🔧 .env ファイル作成
         run: |
-          if [ -f ".env.example" ]; then
-            echo "📝 .env.exampleから.envファイルを作成中..."
-            cp .env.example .env
-          else
-            echo "📝 テスト用.envファイルを作成中..."
-            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
-            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
-            echo "DEBUG_MODE=true" >> .env
-          fi
-          echo "✅ .envファイルが作成されました"
+          echo "📝 .envファイルを作成中..."
+          cp .env.example .env
+          echo "✅ .env.exampleから.envファイルを作成しました"
         
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
         continue-on-error: true
         
       - name: 🧪 包括的テスト実行
+        timeout-minutes: 12
         run: |
           echo "🔍 包括的テストを実行中..."
           # ウィジェット以外の全テスト
-          flutter test --exclude-tags=widget --reporter=expanded --coverage
+          flutter test --exclude-tags=widget --reporter=expanded --coverage --timeout=10m
           
       - name: 📊 カバレッジレポート生成
         id: coverage-report
@@ -315,25 +300,19 @@ jobs:
         
       - name: 🔧 .env ファイル作成
         run: |
-          if [ -f ".env.example" ]; then
-            echo "📝 .env.exampleから.envファイルを作成中..."
-            cp .env.example .env
-          else
-            echo "📝 テスト用.envファイルを作成中..."
-            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
-            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
-            echo "DEBUG_MODE=true" >> .env
-          fi
-          echo "✅ .envファイルが作成されました"
+          echo "📝 .envファイルを作成中..."
+          cp .env.example .env
+          echo "✅ .env.exampleから.envファイルを作成しました"
         
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
         continue-on-error: true
         
       - name: 🧪 フルテスト実行
+        timeout-minutes: 18
         run: |
           echo "🎯 フルテストスイートを実行中..."
-          flutter test --reporter=expanded --coverage
+          flutter test --reporter=expanded --coverage --timeout=15m
           
       - name: 📊 カバレッジレポート生成
         id: coverage-report-full
@@ -515,14 +494,8 @@ jobs:
           
           # .envファイルの存在確認（分析時には不要だが安全のため）
           if [ ! -f ".env" ]; then
-            if [ -f ".env.example" ]; then
-              echo "⚠️ .env.exampleから.envファイルを作成します"
-              cp .env.example .env
-            else
-              echo "⚠️ .envファイルが見つからないため作成します"
-              echo "SUPABASE_URL=https://test-project.supabase.co" > .env
-              echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
-            fi
+            echo "⚠️ .envファイルが見つからないため作成します"
+            cp .env.example .env
           fi
           
           if [ ! -f "coverage/lcov.info" ]; then

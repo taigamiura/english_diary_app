@@ -45,12 +45,21 @@ lib/
    flutter pub get
    ```
 2. **環境変数ファイルの作成**
-   - プロジェクトルートに `.env` を作成し、以下を記載：
-     ```env
-     SUPABASE_URL=xxx
-     SUPABASE_ANON_KEY=xxx
-     SENTRY_DSN=xxx
+   - `.env.example` をコピーして `.env` を作成：
+     ```sh
+     cp .env.example .env
      ```
+   - `.env` ファイルに実際の設定値を記載：
+     ```env
+     SUPABASE_URL=your_actual_supabase_url
+     SUPABASE_ANON_KEY=your_actual_anon_key
+     SENTRY_DSN=your_actual_sentry_dsn
+     GOOGLE_IOS_CLIENT_ID=your_ios_client_id
+     GOOGLE_WEB_CLIENT_ID=your_web_client_id
+     DEV_USER_EMAIL=your_dev_email
+     DEV_USER_PASSWORD=your_dev_password
+     ```
+   - ⚠️ **注意**: `.env` ファイルは `.gitignore` に含まれており、リポジトリにはコミットされません
 3. **iOS/Androidビルド準備**
    - iOS: `cd ios && pod install`
    - Android: `flutter pub get` のみでOK
