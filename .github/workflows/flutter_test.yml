@@ -12,6 +12,10 @@ on:
       - 'feature/*'
       - 'bug/*'
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -78,6 +82,9 @@ jobs:
         continue-on-error: true
         
       - name: 🧪 単体テスト実行
+        env:
+          CI: true
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           echo "📋 テスト実行を開始します..."
           flutter test --reporter=expanded --coverage
@@ -102,6 +109,7 @@ jobs:
           file: coverage/lcov.info
           flags: unittests
           name: english-diary-app-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
           
       - name: 💬 テスト結果をコメント（PR時）
@@ -137,12 +145,18 @@ jobs:
             
             🎉 コードの品質が維持されています！`;
             
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: message
-            });
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+              console.log('✅ コメントを投稿しました');
+            } catch (error) {
+              console.log('⚠️ コメント投稿をスキップしました (権限不足またはフォークPR)');
+              console.log(`Error: ${error.message}`);
+            }
             
       - name: ❌ テスト失敗時の詳細報告
         if: failure()
@@ -166,10 +180,16 @@ jobs:
             詳細はActions のログを確認してください。`;
             
             if (context.payload.pull_request) {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: message
-              });
+              try {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: message
+                });
+                console.log('✅ エラーレポートを投稿しました');
+              } catch (error) {
+                console.log('⚠️ エラーレポート投稿をスキップしました (権限不足またはフォークPR)');
+                console.log(`Error: ${error.message}`);
+              }
             }

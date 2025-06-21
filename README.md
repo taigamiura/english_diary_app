@@ -1,6 +1,28 @@
 # English Diary App
 
-英語日記アプリ（Flutter/Riverpod/Repositoryパターン）
+英語日記アプリ
+
+<!-- プラットフォーム & 技術スタックバッジ -->
+[![Flutter](https://img.shields.io/badge/Flutter-3.24.3-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.7.2+-0175C2?style=flat&logo=dart&logoColor=white)](https://dart.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+<!-- バックエンド & サービスバッジ -->
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat&logo=supabase&logoColor=white)](https://supabase.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Sentry](https://img.shields.io/badge/Sentry-362D59?style=flat&logo=sentry&logoColor=white)](https://sentry.io)
+[![Riverpod](https://img.shields.io/badge/Riverpod-2.6.1-blue?style=flat)](https://riverpod.dev)
+
+<!-- 開発ツール & 品質バッジ -->
+[![Code Style](https://img.shields.io/badge/code%20style-flutter--lints-blue)](https://pub.dev/packages/flutter_lints)
+[![Tests](https://img.shields.io/badge/tests-470+-green)](https://github.com/miurataiga/english-diary-app/actions)
+[![codecov](https://codecov.io/gh/miurataiga/english-diary-app/branch/main/graph/badge.svg?token=YOUR_CODECOV_TOKEN)](https://codecov.io/gh/miurataiga/english-diary-app)
+
+<!-- セキュリティ & アーキテクチャバッジ -->
+[![Security](https://img.shields.io/badge/security-environment%20variables-orange?style=flat&logo=security&logoColor=white)](#セキュリティ運用)
+[![Architecture](https://img.shields.io/badge/architecture-Repository%20Pattern-purple?style=flat)](#アーキテクチャ詳細)
+[![State Management](https://img.shields.io/badge/state-Riverpod%20StateNotifier-blue?style=flat)](https://riverpod.dev)
+[![Testing](https://img.shields.io/badge/testing-mockito%20%2B%20flutter__test-green?style=flat)](https://pub.dev/packages/mockito)
 
 ---
 
@@ -15,6 +37,7 @@
 - Riverpod (状態管理)
 - freezed (モデル/イミュータブル)
 - Supabase (BaaS/認証/DB)
+- PostgreSQL (データベース)
 - Sentry (エラー監視)
 - mockito, flutter_test (テスト)
 - shared_preferences (ローカルストレージ)
