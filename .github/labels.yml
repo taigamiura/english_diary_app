@@ -1,0 +1,134 @@
+# GitHub Labels Configuration
+# This file can be used with github-label-sync or similar tools
+
+labels:
+  # Type labels
+  - name: "bug"
+    color: "d73a4a"
+    description: "Something isn't working"
+    
+  - name: "enhancement"
+    color: "a2eeef"
+    description: "New feature or request"
+    
+  - name: "question"
+    color: "d876e3"
+    description: "Further information is requested"
+    
+  - name: "documentation"
+    color: "0075ca"
+    description: "Improvements or additions to documentation"
+    
+  - name: "refactor"
+    color: "fbca04"
+    description: "Code refactoring"
+    
+  - name: "test"
+    color: "1d76db"
+    description: "Test related changes"
+    
+  # Priority labels
+  - name: "priority: high"
+    color: "b60205"
+    description: "High priority issue"
+    
+  - name: "priority: medium"
+    color: "fbca04"
+    description: "Medium priority issue"
+    
+  - name: "priority: low"
+    color: "0e8a16"
+    description: "Low priority issue"
+    
+  # Status labels
+  - name: "status: blocked"
+    color: "000000"
+    description: "Blocked by other work"
+    
+  - name: "status: in-progress"
+    color: "0052cc"
+    description: "Currently being worked on"
+    
+  - name: "status: review-needed"
+    color: "0e8a16"
+    description: "Ready for review"
+    
+  - name: "status: help-wanted"
+    color: "008672"
+    description: "Extra attention is needed"
+    
+  # Component labels
+  - name: "component: ui"
+    color: "c2e0c6"
+    description: "User interface related"
+    
+  - name: "component: backend"
+    color: "c2e0c6"
+    description: "Backend/API related"
+    
+  - name: "component: database"
+    color: "c2e0c6"
+    description: "Database related"
+    
+  - name: "component: auth"
+    color: "c2e0c6"
+    description: "Authentication related"
+    
+  - name: "component: ai"
+    color: "c2e0c6"
+    description: "AI/ML features"
+    
+  # Platform labels
+  - name: "platform: android"
+    color: "3ddc84"
+    description: "Android specific"
+    
+  - name: "platform: ios"
+    color: "007aff"
+    description: "iOS specific"
+    
+  - name: "platform: web"
+    color: "ff6b35"
+    description: "Web platform specific"
+    
+  # Size labels
+  - name: "size: xs"
+    color: "ededed"
+    description: "Extra small change"
+    
+  - name: "size: s"
+    color: "ededed"
+    description: "Small change"
+    
+  - name: "size: m"
+    color: "ededed"
+    description: "Medium change"
+    
+  - name: "size: l"
+    color: "ededed"
+    description: "Large change"
+    
+  - name: "size: xl"
+    color: "ededed"
+    description: "Extra large change"
+    
+  # Special labels
+  - name: "good first issue"
+    color: "7057ff"
+    description: "Good for newcomers"
+    
+  - name: "duplicate"
+    color: "cfd3d7"
+    description: "This issue or pull request already exists"
+    
+  - name: "invalid"
+    color: "e4e669"
+    description: "This doesn't seem right"
+    
+  - name: "wontfix"
+    color: "ffffff"
+    description: "This will not be worked on"
+    
+  - name: "dependencies"
+    color: "0366d6"
+    description: "Pull requests that update a dependency file"

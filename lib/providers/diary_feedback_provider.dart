@@ -1,12 +1,14 @@
-import '../repositories/diary_feedback_repository.dart';
-import '../services/diary_feedback_service.dart';
-import '../models/diary_feedback_model.dart';
+import 'package:english_diary_app/repositories/diary_feedback_repository.dart';
+import 'package:english_diary_app/services/diary_feedback_service.dart';
+import 'package:english_diary_app/models/diary_feedback_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:english_diary_app/utils/utils.dart' as utils;
 import 'package:english_diary_app/providers/global_state_provider.dart';
 
 // Repository Provider
-final diaryFeedbackRepositoryProvider = Provider<DiaryFeedbackRepository>((ref) => DiaryFeedbackRepository());
+final diaryFeedbackRepositoryProvider = Provider<DiaryFeedbackRepository>(
+  (ref) => DiaryFeedbackRepository(),
+);
 // Service Provider
 final diaryFeedbackServiceProvider = Provider<DiaryFeedbackService>((ref) {
   final repository = ref.read(diaryFeedbackRepositoryProvider);
@@ -37,9 +39,10 @@ class DiaryFeedbackListState {
   }
 }
 
-final diaryFeedbackListProvider = StateNotifierProvider.autoDispose<DiaryFeedbackListNotifier, DiaryFeedbackListState>(
-  (ref) => DiaryFeedbackListNotifier(ref),
-);
+final diaryFeedbackListProvider = StateNotifierProvider.autoDispose<
+  DiaryFeedbackListNotifier,
+  DiaryFeedbackListState
+>((ref) => DiaryFeedbackListNotifier(ref));
 
 class DiaryFeedbackListNotifier extends StateNotifier<DiaryFeedbackListState> {
   final Ref ref;
@@ -52,11 +55,16 @@ class DiaryFeedbackListNotifier extends StateNotifier<DiaryFeedbackListState> {
     error.state = null;
     try {
       final service = ref.read(diaryFeedbackServiceProvider);
-      final items = await service.fetchDiaryFeedbacks(diaryEntryId: diaryEntryId);
+      final items = await service.fetchDiaryFeedbacks(
+        diaryEntryId: diaryEntryId,
+      );
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -70,10 +78,16 @@ class DiaryFeedbackListNotifier extends StateNotifier<DiaryFeedbackListState> {
     try {
       final service = ref.read(diaryFeedbackServiceProvider);
       await service.insertDiaryFeedback(feedback);
-      state = state.copyWith(items: [...state.items, feedback], isLoading: false);
+      state = state.copyWith(
+        items: [...state.items, feedback],
+        isLoading: false,
+      );
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -87,11 +101,15 @@ class DiaryFeedbackListNotifier extends StateNotifier<DiaryFeedbackListState> {
     try {
       final service = ref.read(diaryFeedbackServiceProvider);
       await service.updateDiaryFeedback(updated.id, updated);
-      final newItems = state.items.map((f) => f.id == updated.id ? updated : f).toList();
+      final newItems =
+          state.items.map((f) => f.id == updated.id ? updated : f).toList();
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -109,7 +127,10 @@ class DiaryFeedbackListNotifier extends StateNotifier<DiaryFeedbackListState> {
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
