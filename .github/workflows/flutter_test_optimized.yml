@@ -102,10 +102,16 @@ jobs:
         
       - name: 🔧 .env ファイル作成
         run: |
-          echo "# Test environment variables" > .env
-          echo "API_URL=https://test-api.example.com" >> .env
-          echo "DEBUG_MODE=true" >> .env
-          echo "Environment file created for testing"
+          if [ -f ".env.example" ]; then
+            echo "📝 .env.exampleから.envファイルを作成中..."
+            cp .env.example .env
+          else
+            echo "📝 テスト用.envファイルを作成中..."
+            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
+            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
+            echo "DEBUG_MODE=true" >> .env
+          fi
+          echo "✅ .envファイルが作成されました"
         
       - name: 🧪 クリティカルテスト実行
         run: |
@@ -151,10 +157,16 @@ jobs:
       - name: 🔧 .env ファイル作成
         if: matrix.test-category.condition == 'true'
         run: |
-          echo "# Test environment variables" > .env
-          echo "API_URL=https://test-api.example.com" >> .env
-          echo "DEBUG_MODE=true" >> .env
-          echo "Environment file created for testing"
+          if [ -f ".env.example" ]; then
+            echo "📝 .env.exampleから.envファイルを作成中..."
+            cp .env.example .env
+          else
+            echo "📝 テスト用.envファイルを作成中..."
+            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
+            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
+            echo "DEBUG_MODE=true" >> .env
+          fi
+          echo "✅ .envファイルが作成されました"
         
       - name: 🧪 ${{ matrix.test-category.name }} テスト実行
         if: matrix.test-category.condition == 'true'
@@ -189,10 +201,16 @@ jobs:
         
       - name: 🔧 .env ファイル作成
         run: |
-          echo "# Test environment variables" > .env
-          echo "API_URL=https://test-api.example.com" >> .env
-          echo "DEBUG_MODE=true" >> .env
-          echo "Environment file created for testing"
+          if [ -f ".env.example" ]; then
+            echo "📝 .env.exampleから.envファイルを作成中..."
+            cp .env.example .env
+          else
+            echo "📝 テスト用.envファイルを作成中..."
+            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
+            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
+            echo "DEBUG_MODE=true" >> .env
+          fi
+          echo "✅ .envファイルが作成されました"
         
       - name: 🧪 標準テスト実行
         run: |
@@ -223,10 +241,16 @@ jobs:
         
       - name: 🔧 .env ファイル作成
         run: |
-          echo "# Test environment variables" > .env
-          echo "API_URL=https://test-api.example.com" >> .env
-          echo "DEBUG_MODE=true" >> .env
-          echo "Environment file created for testing"
+          if [ -f ".env.example" ]; then
+            echo "📝 .env.exampleから.envファイルを作成中..."
+            cp .env.example .env
+          else
+            echo "📝 テスト用.envファイルを作成中..."
+            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
+            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
+            echo "DEBUG_MODE=true" >> .env
+          fi
+          echo "✅ .envファイルが作成されました"
         
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -291,10 +315,16 @@ jobs:
         
       - name: 🔧 .env ファイル作成
         run: |
-          echo "# Test environment variables" > .env
-          echo "API_URL=https://test-api.example.com" >> .env
-          echo "DEBUG_MODE=true" >> .env
-          echo "Environment file created for testing"
+          if [ -f ".env.example" ]; then
+            echo "📝 .env.exampleから.envファイルを作成中..."
+            cp .env.example .env
+          else
+            echo "📝 テスト用.envファイルを作成中..."
+            echo "SUPABASE_URL=https://test-project.supabase.co" > .env
+            echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
+            echo "DEBUG_MODE=true" >> .env
+          fi
+          echo "✅ .envファイルが作成されました"
         
       - name: 🔧 コード生成
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -485,8 +515,14 @@ jobs:
           
           # .envファイルの存在確認（分析時には不要だが安全のため）
           if [ ! -f ".env" ]; then
-            echo "⚠️ .envファイルが見つからないため作成します"
-            echo "API_URL=https://test-api.example.com" > .env
+            if [ -f ".env.example" ]; then
+              echo "⚠️ .env.exampleから.envファイルを作成します"
+              cp .env.example .env
+            else
+              echo "⚠️ .envファイルが見つからないため作成します"
+              echo "SUPABASE_URL=https://test-project.supabase.co" > .env
+              echo "SUPABASE_ANON_KEY=test_anon_key" >> .env
+            fi
           fi
           
           if [ ! -f "coverage/lcov.info" ]; then
