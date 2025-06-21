@@ -6,7 +6,9 @@ import 'package:english_diary_app/utils/utils.dart' as utils;
 import 'package:english_diary_app/providers/global_state_provider.dart';
 
 // Repository Provider
-final aiCorrectionRepositoryProvider = Provider<AiCorrectionRepository>((ref) => AiCorrectionRepository());
+final aiCorrectionRepositoryProvider = Provider<AiCorrectionRepository>(
+  (ref) => AiCorrectionRepository(),
+);
 
 // Service Provider
 final aiCorrectionServiceProvider = Provider<AiCorrectionService>((ref) {
@@ -33,14 +35,15 @@ class AiCorrectionListState {
     return AiCorrectionListState(
       items: items ?? this.items,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      error: error ?? this.error,
     );
   }
 }
 
-final aiCorrectionListProvider = StateNotifierProvider.autoDispose<AiCorrectionListNotifier, AiCorrectionListState>(
-  (ref) => AiCorrectionListNotifier(ref),
-);
+final aiCorrectionListProvider = StateNotifierProvider.autoDispose<
+  AiCorrectionListNotifier,
+  AiCorrectionListState
+>((ref) => AiCorrectionListNotifier(ref));
 
 class AiCorrectionListNotifier extends StateNotifier<AiCorrectionListState> {
   final Ref ref;
@@ -53,11 +56,16 @@ class AiCorrectionListNotifier extends StateNotifier<AiCorrectionListState> {
     error.state = null;
     try {
       final service = ref.read(aiCorrectionServiceProvider);
-      final items = await service.fetchAiCorrections(diaryEntryId: diaryEntryId);
+      final items = await service.fetchAiCorrections(
+        diaryEntryId: diaryEntryId,
+      );
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -71,10 +79,16 @@ class AiCorrectionListNotifier extends StateNotifier<AiCorrectionListState> {
     try {
       final service = ref.read(aiCorrectionServiceProvider);
       await service.insertAiCorrection(correction);
-      state = state.copyWith(items: [...state.items, correction], isLoading: false);
+      state = state.copyWith(
+        items: [...state.items, correction],
+        isLoading: false,
+      );
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -88,11 +102,15 @@ class AiCorrectionListNotifier extends StateNotifier<AiCorrectionListState> {
     try {
       final service = ref.read(aiCorrectionServiceProvider);
       await service.updateAiCorrection(updated.id, updated);
-      final newItems = state.items.map((a) => a.id == updated.id ? updated : a).toList();
+      final newItems =
+          state.items.map((a) => a.id == updated.id ? updated : a).toList();
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -110,7 +128,10 @@ class AiCorrectionListNotifier extends StateNotifier<AiCorrectionListState> {
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }

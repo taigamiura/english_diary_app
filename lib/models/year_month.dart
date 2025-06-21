@@ -10,9 +10,24 @@ class YearMonth {
     // "2025-04" 形式にも対応
     final parts = value.split('-');
     if (parts.length >= 2) {
-      final year = int.parse(parts[0]);
-      final month = int.parse(parts[1]);
-      return YearMonth(year, month);
+      try {
+        final year = int.parse(parts[0]);
+        final month = int.parse(parts[1]);
+
+        // 有効な年月の範囲をチェック
+        if (year < 1 || year > 9999) {
+          throw FormatException('Invalid year: $year');
+        }
+        if (month < 1 || month > 12) {
+          throw FormatException('Invalid month: $month');
+        }
+
+        return YearMonth(year, month);
+      } catch (e) {
+        // int.parseが失敗した場合もFormatExceptionをスロー
+        if (e is FormatException) rethrow;
+        throw FormatException('Invalid date format $value');
+      }
     }
     // fallback: ISO8601
     final dt = DateTime.tryParse(value);

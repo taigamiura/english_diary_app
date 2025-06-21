@@ -1,0 +1,61 @@
+# Configuration for the test runner
+# See: https://github.com/dart-lang/test/blob/master/pkgs/test/doc/configuration.md
+
+# Global test timeout
+timeout: 30s
+
+# Test tags configuration
+tags:
+  # Critical tests that should always run
+  critical:
+    timeout: 10s
+    
+  # Unit tests for core logic
+  unit:
+    timeout: 15s
+    
+  # Service layer tests
+  service:
+    timeout: 20s
+    
+  # Widget/UI tests (typically slower)  
+  widget:
+    timeout: 45s
+    
+  # Integration tests
+  integration:
+    timeout: 60s
+
+# Platform configuration
+platforms:
+  - vm
+
+# Concurrency settings
+concurrency: 4
+
+# Reporter settings
+reporter: expanded
+
+# Paths to test
+paths:
+  - test/
+
+# Retry configuration for flaky tests
+retry: 1
+
+# Custom presets for different test strategies
+presets:
+  critical:
+    include_tags: "critical"
+    timeout: 10s
+    
+  unit_only:
+    include_tags: "unit"
+    exclude_tags: "widget"
+    
+  no_widgets:
+    exclude_tags: "widget"
+    
+  full_test:
+    # Run all tests - no tag restrictions
+    timeout: 60s

@@ -1,0 +1,67 @@
+# Codecov Configuration for Flutter Project
+codecov:
+  require_ci_to_pass: true
+  notify:
+    wait_for_ci: true
+
+coverage:
+  precision: 2
+  round: down
+  range: "60...100"
+
+  status:
+    project:
+      default:
+        target: 70%
+        threshold: 10%
+        if_no_uploads: error
+        if_not_found: success
+        if_ci_failed: error
+    patch:
+      default:
+        target: 60%
+        threshold: 15%
+        if_no_uploads: error
+        if_not_found: success
+        if_ci_failed: error
+
+  ignore:
+    # Generated files
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.config.dart"
+    - "**/*.chopper.dart"
+    - "**/*.mocks.dart"
+    
+    # Test files
+    - "test/**/*"
+    - "**/test/**/*"
+    
+    # Build artifacts
+    - "build/**/*"
+    - ".dart_tool/**/*"
+    
+    # Main entry point (usually minimal code)
+    - "lib/main.dart"
+    
+    # Firebase generated files
+    - "lib/firebase_options.dart"
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true
+  branches:
+    - main
+    - development
+
+github_checks:
+  annotations: true
+
+flags:
+  unittests:
+    paths:
+      - lib/
+    carryforward: true

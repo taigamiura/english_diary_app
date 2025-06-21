@@ -1,6 +1,5 @@
 import 'package:english_diary_app/repositories/payment_repository.dart';
-
-import '../models/payment_model.dart';
+import 'package:english_diary_app/models/payment_model.dart';
 
 abstract class PaymentService {
   Future<List<Payment>> fetchPayments({required String profileId});
@@ -15,16 +14,19 @@ class PaymentServiceImpl implements PaymentService {
   PaymentServiceImpl(this.repository);
 
   @override
-  Future<List<Payment>> fetchPayments({required String profileId}) => repository.fetchPayments(profileId: profileId);
+  Future<List<Payment>> fetchPayments({required String profileId}) =>
+      repository.fetchPayments(profileId: profileId);
 
   @override
   Future<Payment?> fetchPayment(int id) => repository.fetchPayment(id);
 
   @override
-  Future<void> insertPayment(Payment payment) => repository.insertPayment(payment);
+  Future<void> insertPayment(Payment payment) =>
+      repository.insertPayment(payment);
 
   @override
-  Future<void> updatePayment(int id, Payment payment) => repository.updatePayment(id, payment);
+  Future<void> updatePayment(int id, Payment payment) =>
+      repository.updatePayment(id, payment);
 
   @override
   Future<void> deletePayment(int id) => repository.deletePayment(id);

@@ -11,8 +11,12 @@ import 'package:english_diary_app/providers/global_state_provider.dart';
 import '../repositories/subscription_repository.dart';
 
 /// Repository Providers
-final profileRepositoryProvider = Provider<ProfileRepository>((ref) => ProfileRepository());
-final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) => SubscriptionRepository());
+final profileRepositoryProvider = Provider<ProfileRepository>(
+  (ref) => ProfileRepository(),
+);
+final subscriptionRepositoryProvider = Provider<SubscriptionRepository>(
+  (ref) => SubscriptionRepository(),
+);
 
 /// Service Providers
 final userServiceProvider = Provider<UserService>((ref) {
@@ -50,7 +54,8 @@ class AuthState {
       user: user ?? this.user,
       isSubscribed: isSubscribed ?? this.isSubscribed,
       currentSubscription: currentSubscription ?? this.currentSubscription,
-      isSubscriptionLoading: isSubscriptionLoading ?? this.isSubscriptionLoading,
+      isSubscriptionLoading:
+          isSubscriptionLoading ?? this.isSubscriptionLoading,
       subscriptionError: subscriptionError,
     );
   }
@@ -68,10 +73,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
   static const _expiresAtKey = 'token_expires_at';
 
   AuthNotifier(this.ref, [FlutterSecureStorage? storage])
-      : _storage = storage ?? const FlutterSecureStorage(),
-        super(const AuthState()) {
-    // Provider初期化時に自動でストレージ復元＆バックグラウンド最新化
-    tryAutoLogin();
+    : _storage = storage ?? const FlutterSecureStorage(),
+      super(const AuthState()) {
+    // Provider初期化時には他のプロバイダーを変更せず、
+    // 初期化完了後に非同期でauto loginを実行
+    _scheduleAutoLogin();
+  }
+
+  /// 初期化完了後にauto loginを実行
+  void _scheduleAutoLogin() {
+    Future.microtask(() => tryAutoLogin());
   }
 
   /// ログイン処理（Google/Email自動判別）
@@ -141,10 +152,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// サブスクリプション情報を取得し状態に反映
   Future<void> _fetchAndSetSubscription(String userId) async {
-    state = state.copyWith(isSubscriptionLoading: true, subscriptionError: null);
+    state = state.copyWith(
+      isSubscriptionLoading: true,
+      subscriptionError: null,
+    );
     try {
       final subService = ref.read(subscriptionServiceProvider);
-      final subs = await subService.fetchSubscriptions(profileId: userId); // profileIdに修正
+      final subs = await subService.fetchSubscriptions(
+        profileId: userId,
+      ); // profileIdに修正
       final active = subs.where((s) => s.status == 'active').toList();
       if (active.isNotEmpty) {
         state = state.copyWith(
