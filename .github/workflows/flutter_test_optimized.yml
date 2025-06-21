@@ -7,7 +7,7 @@ on:
       - development
   pull_request:
     branches:
-      -          echo "📁 作成されたファイルを確認:"main
+      - main
       - development
       - 'feature/*'
       - 'bug/*'
@@ -113,7 +113,7 @@ jobs:
           echo "🔍 ワークスペース内容を確認:"
           ls -la
           echo "🔍 .envファイル関連:"
-          ls -la .env* || echo "⚠️ .envファイルが見つかりません"
+          ls -la .env* 2>/dev/null || echo "⚠️ .envファイルが見つかりません"
           if [ -f ".env.example" ]; then
             echo "✅ .env.exampleが見つかりました。コピーします..."
             cp .env.example .env
@@ -132,10 +132,12 @@ jobs:
             echo "DEBUG_MODE=true" >> .env
             echo "LOG_LEVEL=debug" >> .env
             echo "API_TIMEOUT=30000" >> .env
+            echo "ENVIRONMENT=test" >> .env
             echo "✅ テスト用.envファイルを作成しました"
           fi
-          echo "� 作成されたファイルを確認:"
+          echo "📁 作成されたファイルを確認:"
           ls -la .env
+          echo "📏 ファイルサイズ: $(wc -l < .env) 行"
         
       - name: 🧪 クリティカルテスト実行
         timeout-minutes: 3
