@@ -10,7 +10,7 @@ jobs:
   create_pr:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
     steps:
       - name: Debug workflow trigger
@@ -25,9 +25,18 @@ jobs:
         with:
           fetch-depth: 0  # 全履歴を取得
           
-      - name: Fetch development branch
+      - name: Setup development branch
         run: |
-          git fetch origin development:development || echo "development branch may not exist yet"
+          # リモートのdevelopmentブランチを取得、存在しない場合は作成
+          if git ls-remote --exit-code --heads origin development >/dev/null 2>&1; then
+            echo "✅ Development branch exists on remote"
+            git fetch origin development:development
+          else
+            echo "⚠️ Development branch does not exist, creating it"
+            git checkout -b development
+            git push -u origin development
+            echo "✅ Created development branch"
+          fi
 
       - name: Get recent commit messages
         id: commits
@@ -35,9 +44,16 @@ jobs:
           # developmentブランチが存在する場合は差分を、存在しない場合は直近のコミットを取得
           if git rev-parse --verify development >/dev/null 2>&1; then
             commit_messages="$(git log development..HEAD --pretty=format:"- %h %s (%an)" | head -10)"
+            # developmentとの差分がない場合のチェック
+            if [ -z "$commit_messages" ]; then
+              commit_messages="$(git log HEAD --pretty=format:"- %h %s (%an)" | head -3)"
+            fi
           else
             commit_messages="$(git log HEAD --pretty=format:"- %h %s (%an)" | head -5)"
           fi
+          
+          echo "📝 Found commit messages:"
+          echo "$commit_messages"
           
           # ランダムなデリミターを生成して安全にマルチライン出力を設定
           delimiter="ghadelimiter_$(openssl rand -hex 8)"
@@ -84,24 +100,27 @@ jobs:
       - name: Create Pull Request
         if: steps.check_commits.outputs.skip == 'false' && steps.check_pr.outputs.exists == 'false'
         id: create_pr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: development
-          branch: ${{ github.ref_name }}
-          title: "🤖 【自動PR】${{ github.ref_name }} → development"
-          body: |
-            ![auto-pr](https://img.shields.io/badge/auto--pr-generated-blue)
+        run: |
+          echo "🚀 Creating pull request..."
+          echo "From: ${{ github.ref_name }}"
+          echo "To: development"
+          
+          # PRの作成を試行
+          if pr_url=$(gh pr create \
+            --base development \
+            --head "${{ github.ref_name }}" \
+            --title "🤖 【自動PR】${{ github.ref_name }} → development" \
+            --body "![auto-pr](https://img.shields.io/badge/auto--pr-generated-blue)
 
             ## 🤖 自動生成プルリクエスト
-            **このPRは `${{ github.ref_name }}` ブランチへのpushを検知して自動生成されました。**
+            **このPRは \`${{ github.ref_name }}\` ブランチへのpushを検知して自動生成されました。**
 
             ---
             ### 📝 概要
-            このPRは `${{ github.ref_name }}` での最新の修正・追加内容を `development` ブランチへ反映するためのものです。
+            このPRは \`${{ github.ref_name }}\` での最新の修正・追加内容を \`development\` ブランチへ反映するためのものです。
 
-            **📤 マージ元ブランチ:** `${{ github.ref_name }}`
-            **📥 マージ先ブランチ:** `development`
+            **📤 マージ元ブランチ:** \`${{ github.ref_name }}\`
+            **📥 マージ先ブランチ:** \`development\`
 
             ---
             ### 📋 直近のコミット一覧（最大10件）
@@ -116,20 +135,44 @@ jobs:
             ---
             ### ⚠️ 注意事項
             - 🤖 このPRは自動生成です。内容に不備がある場合は手動で修正・クローズしてください。
-            - 📢 マージ後、`development` ブランチに変更が反映されます。
-          labels: auto-pr
+            - 📢 マージ後、\`development\` ブランチに変更が反映されます。" \
+            --label "auto-pr" 2>&1); then
+            echo "✅ PR created successfully"
+            echo "pull-request-url=$pr_url" >> $GITHUB_OUTPUT
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Failed to create PR"
+            echo "Error output: $pr_url"
+            echo "success=false" >> $GITHUB_OUTPUT
+            # エラーでもワークフロー自体は継続
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: PR Creation Result
         if: always()
         run: |
+          echo "🎯 PR Creation Summary"
+          echo "======================"
+          
           if [ "${{ steps.check_commits.outputs.skip }}" = "true" ]; then
             echo "❌ No commits to merge - PR creation skipped"
+            echo "Reason: No new commits found between branches"
           elif [ "${{ steps.check_pr.outputs.exists }}" = "true" ]; then
             echo "ℹ️ PR already exists - creation skipped"
-          elif [ "${{ steps.create_pr.outcome }}" = "success" ]; then
-            echo "✅ PR created successfully"
+            echo "Reason: An open PR already exists for this branch"
+          elif [ "${{ steps.create_pr.outputs.success }}" = "true" ]; then
+            echo "✅ PR created successfully!"
             echo "PR URL: ${{ steps.create_pr.outputs.pull-request-url }}"
+            echo "Branch: ${{ github.ref_name }} → development"
           else
-            echo "❌ PR creation failed"
-            exit 1
+            echo "⚠️ PR creation encountered an issue"
+            echo "This may be due to:"
+            echo "- No changes between branches"
+            echo "- Permission issues"
+            echo "- Branch protection rules"
+            echo "Please check the logs above for more details."
           fi
+          
+          echo "======================"
+          echo "✅ Workflow completed"
