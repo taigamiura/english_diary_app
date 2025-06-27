@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/models/ai_correction_model.dart';
+import 'package:kiwi/models/ai_correction_model.dart';
 
 void main() {
   group('AiCorrection Model Tests', () {

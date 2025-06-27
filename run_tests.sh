@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# English Diary App Test Runner
-# This script runs all tests for the English Diary App
+# KIWI Test Runner
+# This script runs all tests for the KIWI
 
-echo "🧪 English Diary App - Test Suite Runner"
+echo "🧪 KIWI - Test Suite Runner"
 echo "========================================"
 
 # Function to print colored output

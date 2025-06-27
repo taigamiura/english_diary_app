@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/constants/app_constants.dart';
+import 'package:kiwi/constants/app_constants.dart';
 
 void main() {
   group('AppConstants Tests', () {
     test('should have app name defined', () {
-      expect(AppConstants.appName, equals('English Diary App'));
+      expect(AppConstants.appName, equals('KIWI'));
       expect(AppConstants.appName, isNotEmpty);
     });
 
@@ -12,18 +12,10 @@ void main() {
       expect(AppConstants.appName, isA<String>());
       expect(AppConstants.appName.trim(), equals(AppConstants.appName));
     });
-
-    test('should have proper app name format', () {
-      expect(AppConstants.appName.length, greaterThan(0));
-      expect(AppConstants.appName.contains('English'), isTrue);
-      expect(AppConstants.appName.contains('Diary'), isTrue);
-      expect(AppConstants.appName.contains('App'), isTrue);
-    });
-
     test('should be accessible as static constant', () {
       // Test that it's a compile-time constant
       const appName = AppConstants.appName;
-      expect(appName, equals('English Diary App'));
+      expect(appName, equals('KIWI'));
     });
 
     test('should maintain immutability', () {

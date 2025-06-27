@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/repositories/subscription_repository.dart';
-import 'package:english_diary_app/models/subscription_model.dart';
+import 'package:kiwi/repositories/subscription_repository.dart';
+import 'package:kiwi/models/subscription_model.dart';
 
 void main() {
   group('SubscriptionRepository Tests', () {

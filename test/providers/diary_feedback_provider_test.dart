@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:english_diary_app/providers/diary_feedback_provider.dart';
-import 'package:english_diary_app/services/diary_feedback_service.dart';
-import 'package:english_diary_app/models/diary_feedback_model.dart';
+import 'package:kiwi/providers/diary_feedback_provider.dart';
+import 'package:kiwi/services/diary_feedback_service.dart';
+import 'package:kiwi/models/diary_feedback_model.dart';
 
 // Mock classes manually defined
 class MockDiaryFeedbackService extends Mock implements DiaryFeedbackService {

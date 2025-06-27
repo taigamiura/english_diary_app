@@ -1,4 +1,4 @@
-package com.example.english_diary_app
+package com.example.KIWI
 
 import io.flutter.embedding.android.FlutterActivity
 

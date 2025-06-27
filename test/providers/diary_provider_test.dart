@@ -2,12 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/providers/diary_provider.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
-import 'package:english_diary_app/services/diary_service.dart';
-import 'package:english_diary_app/models/diary_model.dart';
-import 'package:english_diary_app/models/year_month.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/providers/diary_provider.dart';
+import 'package:kiwi/providers/auth_provider.dart';
+import 'package:kiwi/services/diary_service.dart';
+import 'package:kiwi/models/diary_model.dart';
+import 'package:kiwi/models/year_month.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 import '../mocks/mock_annotations.mocks.dart';
 

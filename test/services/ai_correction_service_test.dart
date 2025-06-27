@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/services/ai_correction_service.dart';
-import 'package:english_diary_app/repositories/ai_correction_repository.dart';
-import 'package:english_diary_app/models/ai_correction_model.dart';
+import 'package:kiwi/services/ai_correction_service.dart';
+import 'package:kiwi/repositories/ai_correction_repository.dart';
+import 'package:kiwi/models/ai_correction_model.dart';
 
 import 'ai_correction_service_test.mocks.dart';
 

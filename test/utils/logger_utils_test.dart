@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
-import 'package:english_diary_app/utils/logger_utils.dart';
+import 'package:kiwi/utils/logger_utils.dart';
 
 void main() {
   group('AppLogger Tests', () {

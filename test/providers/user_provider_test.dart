@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/providers/user_provider.dart';
-import 'package:english_diary_app/services/user_service.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/providers/user_provider.dart';
+import 'package:kiwi/services/user_service.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 import 'user_provider_test.mocks.dart';
 

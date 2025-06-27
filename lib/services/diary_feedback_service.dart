@@ -1,5 +1,5 @@
-import 'package:english_diary_app/repositories/diary_feedback_repository.dart';
-import 'package:english_diary_app/models/diary_feedback_model.dart';
+import 'package:kiwi/repositories/diary_feedback_repository.dart';
+import 'package:kiwi/models/diary_feedback_model.dart';
 
 abstract class DiaryFeedbackService {
   Future<List<DiaryFeedback>> fetchDiaryFeedbacks({

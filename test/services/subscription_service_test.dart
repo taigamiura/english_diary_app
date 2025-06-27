@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/services/subscription_service.dart';
-import 'package:english_diary_app/repositories/subscription_repository.dart';
-import 'package:english_diary_app/models/subscription_model.dart';
+import 'package:kiwi/services/subscription_service.dart';
+import 'package:kiwi/repositories/subscription_repository.dart';
+import 'package:kiwi/models/subscription_model.dart';
 
 import 'subscription_service_test.mocks.dart';
 

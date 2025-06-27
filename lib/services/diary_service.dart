@@ -1,6 +1,6 @@
-import 'package:english_diary_app/repositories/diary_repository.dart';
-import 'package:english_diary_app/models/diary_model.dart';
-import 'package:english_diary_app/models/year_month.dart';
+import 'package:kiwi/repositories/diary_repository.dart';
+import 'package:kiwi/models/diary_model.dart';
+import 'package:kiwi/models/year_month.dart';
 
 abstract class DiaryService {
   Future<List<Diary>> fetchDiaries({

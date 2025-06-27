@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/views/settings/dashboard_page.dart';
-import 'package:english_diary_app/providers/diary_provider.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/views/settings/dashboard_page.dart';
+import 'package:kiwi/providers/diary_provider.dart';
+import 'package:kiwi/providers/auth_provider.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 class MockDiaryListNotifier extends DiaryListNotifier {
   MockDiaryListNotifier(super.ref, DiaryListState state) {

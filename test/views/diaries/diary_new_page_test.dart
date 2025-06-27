@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/constants/app_strings.dart';
+import 'package:kiwi/constants/app_strings.dart';
 
-import 'package:english_diary_app/views/diaries/diary_new_page.dart';
+import 'package:kiwi/views/diaries/diary_new_page.dart';
 
 void main() {
   group('DiaryNewPage Tests', () {

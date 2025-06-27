@@ -1,5 +1,5 @@
-import 'package:english_diary_app/repositories/subscription_repository.dart';
-import 'package:english_diary_app/models/subscription_model.dart';
+import 'package:kiwi/repositories/subscription_repository.dart';
+import 'package:kiwi/models/subscription_model.dart';
 
 abstract class SubscriptionService {
   Future<List<Subscription>> fetchSubscriptions({required String profileId});

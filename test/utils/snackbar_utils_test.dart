@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/utils/snackbar_utils.dart';
-import 'package:english_diary_app/constants/app_colors.dart';
+import 'package:kiwi/utils/snackbar_utils.dart';
+import 'package:kiwi/constants/app_colors.dart';
 
 void main() {
   group('SnackBar Utils Tests', () {

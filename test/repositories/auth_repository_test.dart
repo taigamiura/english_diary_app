@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/repositories/auth_repository.dart';
+import 'package:kiwi/repositories/auth_repository.dart';
 
 void main() {
   group('AuthRepository', () {

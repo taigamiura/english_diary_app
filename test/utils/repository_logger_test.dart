@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/utils/repository_logger.dart';
+import 'package:kiwi/utils/repository_logger.dart';
 
 void main() {
   group('Repository Logger Tests', () {

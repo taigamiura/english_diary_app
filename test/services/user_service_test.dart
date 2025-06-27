@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/services/user_service.dart';
-import 'package:english_diary_app/repositories/profile_repository.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/services/user_service.dart';
+import 'package:kiwi/repositories/profile_repository.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 import 'user_service_test.mocks.dart';
 

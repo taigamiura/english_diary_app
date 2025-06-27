@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:english_diary_app/utils/utils.dart' as utils;
+import 'package:kiwi/utils/utils.dart' as utils;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/user_service.dart';
@@ -7,7 +7,7 @@ import '../models/profile_model.dart';
 import '../repositories/profile_repository.dart';
 import '../models/subscription_model.dart';
 import '../services/subscription_service.dart';
-import 'package:english_diary_app/providers/global_state_provider.dart';
+import 'package:kiwi/providers/global_state_provider.dart';
 import '../repositories/subscription_repository.dart';
 
 /// Repository Providers

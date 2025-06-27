@@ -1,4 +1,4 @@
-import 'package:english_diary_app/constants/error_msg.dart';
+import 'package:kiwi/constants/error_msg.dart';
 
 /// 共通エラーメッセージ変換ユーティリティ
 enum ErrorDomain { auth, other }
@@ -12,4 +12,3 @@ String friendlyErrorMessage(Object e, {ErrorDomain domain = ErrorDomain.auth}) {
   }
   return 'エラーが発生しました: $msg';
 }
-

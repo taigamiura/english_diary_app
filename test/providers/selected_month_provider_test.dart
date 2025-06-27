@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/selected_month_provider.dart';
+import 'package:kiwi/providers/selected_month_provider.dart';
 
 void main() {
   group('Selected Month Provider Tests', () {

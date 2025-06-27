@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/services/diary_feedback_service.dart';
-import 'package:english_diary_app/repositories/diary_feedback_repository.dart';
-import 'package:english_diary_app/models/diary_feedback_model.dart';
+import 'package:kiwi/services/diary_feedback_service.dart';
+import 'package:kiwi/repositories/diary_feedback_repository.dart';
+import 'package:kiwi/models/diary_feedback_model.dart';
 
 import 'diary_feedback_service_test.mocks.dart';
 

@@ -1,4 +1,4 @@
-# English Diary App
+# KIWI
 
 英語日記アプリ
 

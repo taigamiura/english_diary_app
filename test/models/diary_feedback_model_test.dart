@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/models/diary_feedback_model.dart';
+import 'package:kiwi/models/diary_feedback_model.dart';
 
 void main() {
   group('DiaryFeedback Model Tests', () {

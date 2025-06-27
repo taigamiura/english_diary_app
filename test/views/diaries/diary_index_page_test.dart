@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'package:english_diary_app/views/diaries/diary_index_page.dart';
-import 'package:english_diary_app/providers/diary_provider.dart';
-import 'package:english_diary_app/models/diary_model.dart';
-import 'package:english_diary_app/widgets/loading_indicator.dart';
+import 'package:kiwi/views/diaries/diary_index_page.dart';
+import 'package:kiwi/providers/diary_provider.dart';
+import 'package:kiwi/models/diary_model.dart';
+import 'package:kiwi/widgets/loading_indicator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
-import 'package:english_diary_app/providers/selected_month_provider.dart';
-import 'package:english_diary_app/models/profile_model.dart';
-import 'package:english_diary_app/models/year_month.dart';
-import 'package:english_diary_app/views/settings/dashboard_page.dart';
-import 'package:english_diary_app/views/diaries/diary_new_page.dart';
-import 'package:english_diary_app/views/diaries/diary_id_page.dart';
+import 'package:kiwi/providers/auth_provider.dart';
+import 'package:kiwi/providers/selected_month_provider.dart';
+import 'package:kiwi/models/profile_model.dart';
+import 'package:kiwi/models/year_month.dart';
+import 'package:kiwi/views/settings/dashboard_page.dart';
+import 'package:kiwi/views/diaries/diary_new_page.dart';
+import 'package:kiwi/views/diaries/diary_id_page.dart';
 
 class MockDiaryListNotifier extends DiaryListNotifier {
   MockDiaryListNotifier(super.ref, DiaryListState state) {

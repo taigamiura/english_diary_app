@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/repositories/ai_correction_repository.dart';
-import 'package:english_diary_app/models/ai_correction_model.dart';
+import 'package:kiwi/repositories/ai_correction_repository.dart';
+import 'package:kiwi/models/ai_correction_model.dart';
 
 void main() {
   group('AiCorrectionRepository', () {

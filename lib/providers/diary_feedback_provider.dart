@@ -1,9 +1,9 @@
-import 'package:english_diary_app/repositories/diary_feedback_repository.dart';
-import 'package:english_diary_app/services/diary_feedback_service.dart';
-import 'package:english_diary_app/models/diary_feedback_model.dart';
+import 'package:kiwi/repositories/diary_feedback_repository.dart';
+import 'package:kiwi/services/diary_feedback_service.dart';
+import 'package:kiwi/models/diary_feedback_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
-import 'package:english_diary_app/providers/global_state_provider.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
+import 'package:kiwi/providers/global_state_provider.dart';
 
 // Repository Provider
 final diaryFeedbackRepositoryProvider = Provider<DiaryFeedbackRepository>(
