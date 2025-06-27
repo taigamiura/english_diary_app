@@ -32,14 +32,20 @@ jobs:
       - name: Get recent commit messages
         id: commits
         run: |
-          echo "messages<<EOF" >> $GITHUB_OUTPUT
           # developmentブランチが存在する場合は差分を、存在しない場合は直近のコミットを取得
           if git rev-parse --verify development >/dev/null 2>&1; then
-            git log development..HEAD --pretty=format:"- %h %s (%an)" | head -10 >> $GITHUB_OUTPUT
+            commit_messages="$(git log development..HEAD --pretty=format:"- %h %s (%an)" | head -10)"
           else
-            git log HEAD --pretty=format:"- %h %s (%an)" | head -5 >> $GITHUB_OUTPUT
+            commit_messages="$(git log HEAD --pretty=format:"- %h %s (%an)" | head -5)"
           fi
-          echo "EOF" >> $GITHUB_OUTPUT
+          
+          # ランダムなデリミターを生成して安全にマルチライン出力を設定
+          delimiter="ghadelimiter_$(openssl rand -hex 8)"
+          {
+            echo "messages<<${delimiter}"
+            echo "$commit_messages"
+            echo "${delimiter}"
+          } >> $GITHUB_OUTPUT
           
       - name: Debug commit messages
         run: |
