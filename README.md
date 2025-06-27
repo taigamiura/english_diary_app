@@ -1,6 +1,7 @@
-# KIWI
-
-英語日記アプリ
+# KIWI　-　英語日記アプリ
+<div align="center">
+  <img src="assets/app-logo.png" alt="KIWI Logo" width="120" height="120">
+</div>
 
 <!-- プラットフォーム & 技術スタックバッジ -->
 [![Flutter](https://img.shields.io/badge/Flutter-3.24.3-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev)
@@ -16,7 +17,7 @@
 <!-- 開発ツール & 品質バッジ -->
 [![Code Style](https://img.shields.io/badge/code%20style-flutter--lints-blue)](https://pub.dev/packages/flutter_lints)
 [![Tests](https://img.shields.io/badge/tests-470+-green)](https://github.com/miurataiga/english-diary-app/actions)
-[![codecov](https://codecov.io/gh/miurataiga/english-diary-app/branch/main/graph/badge.svg?token=YOUR_CODECOV_TOKEN)](https://codecov.io/gh/miurataiga/english-diary-app)
+[![codecov](https://codecov.io/gh/miurataiga/english-diary-app/branch/main/graph/badge.svg?token=YOUR_CODECOV_TOKEN)](https://app.codecov.io/gh/taigamiura/english_diary_app)
 
 <!-- セキュリティ & アーキテクチャバッジ -->
 [![Security](https://img.shields.io/badge/security-environment%20variables-orange?style=flat&logo=security&logoColor=white)](#セキュリティ運用)
