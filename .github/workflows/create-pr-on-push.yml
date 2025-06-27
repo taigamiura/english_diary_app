@@ -9,27 +9,75 @@ on:
 jobs:
   create_pr:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
+      - name: Debug workflow trigger
+        run: |
+          echo "🔍 Workflow Debug Information"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Actor: ${{ github.actor }}"
+          
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 全履歴を取得
+          
+      - name: Fetch development branch
+        run: |
+          git fetch origin development:development || echo "development branch may not exist yet"
 
       - name: Get recent commit messages
         id: commits
         run: |
           echo "messages<<EOF" >> $GITHUB_OUTPUT
-          git log origin/development..HEAD --pretty=format:"- %h %s (%an)" | head -10 >> $GITHUB_OUTPUT
+          # developmentブランチが存在する場合は差分を、存在しない場合は直近のコミットを取得
+          if git rev-parse --verify development >/dev/null 2>&1; then
+            git log development..HEAD --pretty=format:"- %h %s (%an)" | head -10 >> $GITHUB_OUTPUT
+          else
+            git log HEAD --pretty=format:"- %h %s (%an)" | head -5 >> $GITHUB_OUTPUT
+          fi
           echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Debug commit messages
+        run: |
+          echo "Commit messages:"
+          echo "${{ steps.commits.outputs.messages }}"
+          echo "Current branch: ${{ github.ref_name }}"
+          echo "Repository: ${{ github.repository }}"
 
       - name: Check if there are commits to merge
         id: check_commits
         run: |
-          if [ -z "${{ steps.commits.outputs.messages }}" ]; then
+          messages="${{ steps.commits.outputs.messages }}"
+          if [ -z "$messages" ] || [ "$messages" = "" ]; then
+            echo "No commits found"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
+            echo "Found commits, proceeding with PR creation"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Check if PR already exists
+        id: check_pr
+        run: |
+          # 既存のPRがあるかチェック
+          existing_pr=$(gh pr list --head "${{ github.ref_name }}" --base development --json number --jq '.[0].number' || echo "")
+          if [ -n "$existing_pr" ] && [ "$existing_pr" != "null" ]; then
+            echo "PR already exists: #$existing_pr"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "No existing PR found"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Pull Request
-        if: steps.check_commits.outputs.skip == 'false'
+        if: steps.check_commits.outputs.skip == 'false' && steps.check_pr.outputs.exists == 'false'
+        id: create_pr
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -64,3 +112,18 @@ jobs:
             - 🤖 このPRは自動生成です。内容に不備がある場合は手動で修正・クローズしてください。
             - 📢 マージ後、`development` ブランチに変更が反映されます。
           labels: auto-pr
+          
+      - name: PR Creation Result
+        if: always()
+        run: |
+          if [ "${{ steps.check_commits.outputs.skip }}" = "true" ]; then
+            echo "❌ No commits to merge - PR creation skipped"
+          elif [ "${{ steps.check_pr.outputs.exists }}" = "true" ]; then
+            echo "ℹ️ PR already exists - creation skipped"
+          elif [ "${{ steps.create_pr.outcome }}" = "success" ]; then
+            echo "✅ PR created successfully"
+            echo "PR URL: ${{ steps.create_pr.outputs.pull-request-url }}"
+          else
+            echo "❌ PR creation failed"
+            exit 1
+          fi
