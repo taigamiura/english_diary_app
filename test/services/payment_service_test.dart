@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/services/payment_service.dart';
-import 'package:english_diary_app/repositories/payment_repository.dart';
-import 'package:english_diary_app/models/payment_model.dart';
+import 'package:kiwi/services/payment_service.dart';
+import 'package:kiwi/repositories/payment_repository.dart';
+import 'package:kiwi/models/payment_model.dart';
 
 import 'payment_service_test.mocks.dart';
 

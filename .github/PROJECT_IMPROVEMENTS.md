@@ -31,7 +31,7 @@
 ### 1. GitHub Project Boards の活用
 ```bash
 # GitHub CLIでプロジェクトボード作成（推奨）
-gh project create --title "English Diary App Development" --body "Main development board"
+gh project create --title "KIWI Development" --body "Main development board"
 ```
 
 **推奨カラム構成**:
@@ -144,4 +144,4 @@ docs/
 
 ---
 
-この設定により、English Diary Appのプロジェクトは非常に堅牢で効率的なGitHubベースの開発環境となります。継続的な改善と監視により、高品質なアプリケーション開発が可能になります。
+この設定により、KIWIのプロジェクトは非常に堅牢で効率的なGitHubベースの開発環境となります。継続的な改善と監視により、高品質なアプリケーション開発が可能になります。

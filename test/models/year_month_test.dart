@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/models/year_month.dart';
+import 'package:kiwi/models/year_month.dart';
 
 void main() {
   group('YearMonth Model Tests', () {

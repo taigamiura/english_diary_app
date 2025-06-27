@@ -1,8 +1,8 @@
-import 'package:english_diary_app/providers/auth_provider.dart';
+import 'package:kiwi/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:english_diary_app/constants/app_colors.dart';
-import 'package:english_diary_app/providers/diary_provider.dart';
-import 'package:english_diary_app/providers/selected_month_provider.dart';
+import 'package:kiwi/constants/app_colors.dart';
+import 'package:kiwi/providers/diary_provider.dart';
+import 'package:kiwi/providers/selected_month_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {

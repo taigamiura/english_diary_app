@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/repositories/api_repository.dart';
+import 'package:kiwi/repositories/api_repository.dart';
 
 void main() {
   group('ApiRepository Tests', () {

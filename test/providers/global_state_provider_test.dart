@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/global_state_provider.dart';
+import 'package:kiwi/providers/global_state_provider.dart';
 
 void main() {
   group('Global State Provider Tests', () {

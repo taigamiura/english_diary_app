@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:english_diary_app/providers/payment_provider.dart';
-import 'package:english_diary_app/services/payment_service.dart';
-import 'package:english_diary_app/models/payment_model.dart';
+import 'package:kiwi/providers/payment_provider.dart';
+import 'package:kiwi/services/payment_service.dart';
+import 'package:kiwi/models/payment_model.dart';
 
 // Mock classes manually defined
 class MockPaymentService extends Mock implements PaymentService {

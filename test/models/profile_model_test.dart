@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 void main() {
   group('Profile Model Tests', () {

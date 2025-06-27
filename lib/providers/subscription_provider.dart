@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/global_state_provider.dart';
-import 'package:english_diary_app/models/subscription_model.dart';
-import 'package:english_diary_app/services/subscription_service.dart';
-import 'package:english_diary_app/repositories/subscription_repository.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
+import 'package:kiwi/providers/global_state_provider.dart';
+import 'package:kiwi/models/subscription_model.dart';
+import 'package:kiwi/services/subscription_service.dart';
+import 'package:kiwi/repositories/subscription_repository.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
 
 final subscriptionRepositoryProvider = Provider<SubscriptionRepository>(
   (ref) => SubscriptionRepository(),

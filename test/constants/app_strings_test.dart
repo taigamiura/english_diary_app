@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/constants/app_strings.dart';
+import 'package:kiwi/constants/app_strings.dart';
 
 void main() {
   group('AppStrings Tests', () {

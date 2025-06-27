@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
-import 'package:english_diary_app/constants/error_msg.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
+import 'package:kiwi/constants/error_msg.dart';
 
 void main() {
   group('Utils Tests', () {

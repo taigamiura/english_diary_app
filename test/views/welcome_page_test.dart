@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/views/welcome_page.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/views/welcome_page.dart';
+import 'package:kiwi/providers/auth_provider.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 class MockAuthNotifier extends AuthNotifier {
   MockAuthNotifier(super.ref, AuthState state) {

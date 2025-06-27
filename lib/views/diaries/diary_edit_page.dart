@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
-import 'package:english_diary_app/constants/app_colors.dart';
-import 'package:english_diary_app/constants/app_strings.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
-import 'package:english_diary_app/utils/snackbar_utils.dart';
+import 'package:kiwi/constants/app_colors.dart';
+import 'package:kiwi/constants/app_strings.dart';
+import 'package:kiwi/providers/auth_provider.dart';
+import 'package:kiwi/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/diary_provider.dart';
+import 'package:kiwi/providers/diary_provider.dart';
 
 class DiaryEditPage extends ConsumerStatefulWidget {
   final String diaryId;
@@ -24,10 +24,14 @@ class _DiaryDetailPageState extends ConsumerState<DiaryEditPage> {
   void initState() {
     super.initState();
     final userId = ref.read(authStateProvider).user?.id;
-    final diary = ref.read(diaryListProvider).items.firstWhereOrNull((d) => d.id == widget.diaryId && d.userId == userId);
+    final diary = ref
+        .read(diaryListProvider)
+        .items
+        .firstWhereOrNull((d) => d.id == widget.diaryId && d.userId == userId);
     if (diary != null) {
       _contentController.text = diary.textInput;
-      _title = '${diary.createdAt!.year}年${diary.createdAt!.month}月${diary.createdAt!.day}日';
+      _title =
+          '${diary.createdAt!.year}年${diary.createdAt!.month}月${diary.createdAt!.day}日';
     }
   }
 
@@ -45,10 +49,9 @@ class _DiaryDetailPageState extends ConsumerState<DiaryEditPage> {
       return;
     }
     try {
-      await ref.read(diaryListProvider.notifier).updateDiary(
-        id: widget.diaryId,
-        textInput: content,
-      );
+      await ref
+          .read(diaryListProvider.notifier)
+          .updateDiary(id: widget.diaryId, textInput: content);
       if (!mounted) return;
       Navigator.pop(context);
     } catch (e) {
@@ -78,7 +81,10 @@ class _DiaryDetailPageState extends ConsumerState<DiaryEditPage> {
         actions: [
           TextButton(
             onPressed: _updateDiary,
-            child: Text(AppStrings.save, style: TextStyle(color: AppColors.mainColor)),
+            child: Text(
+              AppStrings.save,
+              style: TextStyle(color: AppColors.mainColor),
+            ),
           ),
         ],
       ),
@@ -109,13 +115,14 @@ class _DiaryDetailPageState extends ConsumerState<DiaryEditPage> {
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
-                hintText: '今の気持ちや今日の出来事を書いてみよう\nWrite about your feelings or today\'s events\n',
+                hintText:
+                    '今の気持ちや今日の出来事を書いてみよう\nWrite about your feelings or today\'s events\n',
                 hintStyle: TextStyle(color: AppColors.suportTextColor),
               ),
               maxLines: null,
               minLines: 30,
               keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline
+              textInputAction: TextInputAction.newline,
             ),
           ),
         ),

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:english_diary_app/services/diary_service.dart';
-import 'package:english_diary_app/models/diary_model.dart';
-import 'package:english_diary_app/models/year_month.dart';
+import 'package:kiwi/services/diary_service.dart';
+import 'package:kiwi/models/diary_model.dart';
+import 'package:kiwi/models/year_month.dart';
 import '../mocks/mock_annotations.mocks.dart';
 
 void main() {

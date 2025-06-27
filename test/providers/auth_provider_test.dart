@@ -2,11 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
-import 'package:english_diary_app/services/user_service.dart';
-import 'package:english_diary_app/services/subscription_service.dart';
-import 'package:english_diary_app/models/profile_model.dart';
-import 'package:english_diary_app/models/subscription_model.dart';
+import 'package:kiwi/providers/auth_provider.dart';
+import 'package:kiwi/services/user_service.dart';
+import 'package:kiwi/services/subscription_service.dart';
+import 'package:kiwi/models/profile_model.dart';
+import 'package:kiwi/models/subscription_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'auth_provider_test.mocks.dart';

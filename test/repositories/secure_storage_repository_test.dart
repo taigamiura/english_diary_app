@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/repositories/secure_storage_repository.dart';
+import 'package:kiwi/repositories/secure_storage_repository.dart';
 
 void main() {
   group('SecureStorageRepository', () {

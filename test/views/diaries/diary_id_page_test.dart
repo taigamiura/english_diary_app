@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/views/diaries/diary_id_page.dart';
-import 'package:english_diary_app/models/diary_model.dart';
-import 'package:english_diary_app/providers/diary_provider.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/views/diaries/diary_id_page.dart';
+import 'package:kiwi/models/diary_model.dart';
+import 'package:kiwi/providers/diary_provider.dart';
+import 'package:kiwi/providers/auth_provider.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 // Mock notifier for testing
 class MockDiaryListNotifier extends DiaryListNotifier {

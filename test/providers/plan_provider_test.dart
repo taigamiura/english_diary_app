@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:english_diary_app/providers/plan_provider.dart';
-import 'package:english_diary_app/services/plan_service.dart';
-import 'package:english_diary_app/models/plan_model.dart';
+import 'package:kiwi/providers/plan_provider.dart';
+import 'package:kiwi/services/plan_service.dart';
+import 'package:kiwi/models/plan_model.dart';
 
 // Mock classes manually defined
 class MockPlanService extends Mock implements PlanService {

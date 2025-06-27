@@ -2,8 +2,8 @@ import '../repositories/ai_correction_repository.dart';
 import '../services/ai_correction_service.dart';
 import '../models/ai_correction_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
-import 'package:english_diary_app/providers/global_state_provider.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
+import 'package:kiwi/providers/global_state_provider.dart';
 
 // Repository Provider
 final aiCorrectionRepositoryProvider = Provider<AiCorrectionRepository>(

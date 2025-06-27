@@ -1,9 +1,9 @@
-import 'package:english_diary_app/constants/app_colors.dart';
-import 'package:english_diary_app/constants/app_strings.dart';
-import 'package:english_diary_app/utils/snackbar_utils.dart';
+import 'package:kiwi/constants/app_colors.dart';
+import 'package:kiwi/constants/app_strings.dart';
+import 'package:kiwi/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/diary_provider.dart';
+import 'package:kiwi/providers/diary_provider.dart';
 
 class DiaryNewPage extends ConsumerStatefulWidget {
   const DiaryNewPage({super.key});
@@ -30,9 +30,9 @@ class _DiaryNewPageState extends ConsumerState<DiaryNewPage> {
       return;
     }
     try {
-      await ref.read(diaryListProvider.notifier).addDiaryFromInput(
-        textInput: content,
-      );
+      await ref
+          .read(diaryListProvider.notifier)
+          .addDiaryFromInput(textInput: content);
       if (!mounted) return;
       Navigator.pop(context);
     } catch (e) {
@@ -62,7 +62,10 @@ class _DiaryNewPageState extends ConsumerState<DiaryNewPage> {
         actions: [
           TextButton(
             onPressed: _saveDiary,
-            child: Text(AppStrings.save, style: TextStyle(color: AppColors.mainColor)),
+            child: Text(
+              AppStrings.save,
+              style: TextStyle(color: AppColors.mainColor),
+            ),
           ),
         ],
       ),
@@ -93,13 +96,14 @@ class _DiaryNewPageState extends ConsumerState<DiaryNewPage> {
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
-                hintText: '今の気持ちや今日の出来事を書いてみよう\nWrite about your feelings or today\'s events\n',
+                hintText:
+                    '今の気持ちや今日の出来事を書いてみよう\nWrite about your feelings or today\'s events\n',
                 hintStyle: TextStyle(color: AppColors.suportTextColor),
               ),
               maxLines: null,
               minLines: 30,
               keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline
+              textInputAction: TextInputAction.newline,
             ),
           ),
         ),

@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:english_diary_app/providers/ai_correction_provider.dart';
-import 'package:english_diary_app/services/ai_correction_service.dart';
-import 'package:english_diary_app/models/ai_correction_model.dart';
+import 'package:kiwi/providers/ai_correction_provider.dart';
+import 'package:kiwi/services/ai_correction_service.dart';
+import 'package:kiwi/models/ai_correction_model.dart';
 
 import 'ai_correction_provider_test.mocks.dart';
 

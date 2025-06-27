@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/models/plan_model.dart';
+import 'package:kiwi/models/plan_model.dart';
 
 void main() {
   group('Plan Model Tests', () {

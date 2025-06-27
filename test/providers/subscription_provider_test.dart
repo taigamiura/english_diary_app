@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:english_diary_app/providers/subscription_provider.dart';
-import 'package:english_diary_app/services/subscription_service.dart';
-import 'package:english_diary_app/models/subscription_model.dart';
+import 'package:kiwi/providers/subscription_provider.dart';
+import 'package:kiwi/services/subscription_service.dart';
+import 'package:kiwi/models/subscription_model.dart';
 
 // Mock classes manually defined
 class MockSubscriptionService extends Mock implements SubscriptionService {

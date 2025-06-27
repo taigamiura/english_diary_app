@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
-import 'package:english_diary_app/repositories/diary_repository.dart';
-import 'package:english_diary_app/repositories/profile_repository.dart';
-import 'package:english_diary_app/repositories/api_repository.dart';
+import 'package:kiwi/repositories/diary_repository.dart';
+import 'package:kiwi/repositories/profile_repository.dart';
+import 'package:kiwi/repositories/api_repository.dart';
 
 // Mock classes
 class MockDiaryRepository extends Mock implements DiaryRepository {}

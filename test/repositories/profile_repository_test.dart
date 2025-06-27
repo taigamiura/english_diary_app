@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/repositories/profile_repository.dart';
-import 'package:english_diary_app/models/profile_model.dart';
+import 'package:kiwi/repositories/profile_repository.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 void main() {
   group('ProfileRepository', () {

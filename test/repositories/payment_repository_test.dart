@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:english_diary_app/repositories/payment_repository.dart';
-import 'package:english_diary_app/models/payment_model.dart';
+import 'package:kiwi/repositories/payment_repository.dart';
+import 'package:kiwi/models/payment_model.dart';
 
 void main() {
   group('PaymentRepository', () {

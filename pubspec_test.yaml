@@ -1,5 +1,5 @@
-name: english_diary_app
-description: "English diary app with Flutter, Riverpod and Repository pattern"
+name: KIWI
+description: "KIWI with Flutter, Riverpod and Repository pattern"
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
