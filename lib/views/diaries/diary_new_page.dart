@@ -39,20 +39,20 @@ class _DiaryNewPageState extends ConsumerState<DiaryNewPage> {
       showErrorSnackBar(context, '日記の保存に失敗しました: $e');
     }
   }
-
-  void _aiCorrector() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(AppStrings.aiCorrectionStart),
-        action: SnackBarAction(
-          label: AppStrings.yes,
-          onPressed: () {
-            showInfoSnackBar(context, AppStrings.aiCorrectionInProgress);
-          },
-        ),
-      ),
-    );
-  }
+  // TODO: AI校正機能の実装
+  // void _aiCorrector() {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: const Text(AppStrings.aiCorrectionStart),
+  //       action: SnackBarAction(
+  //         label: AppStrings.yes,
+  //         onPressed: () {
+  //           showInfoSnackBar(context, AppStrings.aiCorrectionInProgress);
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,11 +108,12 @@ class _DiaryNewPageState extends ConsumerState<DiaryNewPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _aiCorrector,
-        heroTag: 'aiCorrector',
-        child: const Icon(Icons.auto_awesome, color: AppColors.secondaryColor),
-      ),
+      // TODO: AI校正機能の実装
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _aiCorrector,
+      //   heroTag: 'aiCorrector',
+      //   child: const Icon(Icons.auto_awesome, color: AppColors.secondaryColor),
+      // ),
     );
   }
 }

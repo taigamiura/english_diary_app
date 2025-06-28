@@ -2,7 +2,7 @@ import 'package:kiwi/constants/app_colors.dart';
 import '../../widgets/loading_indicator.dart';
 import 'diary_id_page.dart';
 import 'diary_new_page.dart';
-import '../settings/dashboard_page.dart';
+// import '../settings/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiwi/providers/diary_provider.dart';
@@ -193,67 +193,68 @@ class _DiaryIndexPageState extends ConsumerState<DiaryIndexPage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () async {
-                      // dashboard設定画面へ遷移
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DashboardPage(),
-                        ),
-                      );
-                      if (!mounted) return;
-                      // 設定画面から戻ったら、再度日記を取得
-                      final userId = ref.read(authStateProvider).user?.id;
-                      if (userId != null) {
-                        final selectedMonth = ref.read(selectedMonthProvider);
-                        ref
-                            .read(diaryListProvider.notifier)
-                            .fetchDiaries(
-                              userId: userId,
-                              from: DateTime(
-                                selectedMonth.year,
-                                selectedMonth.month,
-                                1,
-                              ),
-                              to: DateTime(
-                                selectedMonth.year,
-                                selectedMonth.month + 1,
-                                0,
-                                23,
-                                59,
-                                59,
-                                999,
-                              ),
-                              limit: 31,
-                            );
-                      }
-                      ref
-                          .read(diaryListProvider.notifier)
-                          .fetchPostedMonths(userId: userId!);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.mainColor.withAlpha(
-                          (0.08 * 255).toInt(),
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Icon(
-                        Icons.settings,
-                        color: AppColors.mainColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // TODO： 設定画面への遷移を実装する
+              // Expanded(
+              //   child: Align(
+              //     alignment: Alignment.centerRight,
+              //     child: GestureDetector(
+              //       onTap: () async {
+              //         // dashboard設定画面へ遷移
+              //         await Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) => DashboardPage(),
+              //           ),
+              //         );
+              //         if (!mounted) return;
+              //         // 設定画面から戻ったら、再度日記を取得
+              //         final userId = ref.read(authStateProvider).user?.id;
+              //         if (userId != null) {
+              //           final selectedMonth = ref.read(selectedMonthProvider);
+              //           ref
+              //               .read(diaryListProvider.notifier)
+              //               .fetchDiaries(
+              //                 userId: userId,
+              //                 from: DateTime(
+              //                   selectedMonth.year,
+              //                   selectedMonth.month,
+              //                   1,
+              //                 ),
+              //                 to: DateTime(
+              //                   selectedMonth.year,
+              //                   selectedMonth.month + 1,
+              //                   0,
+              //                   23,
+              //                   59,
+              //                   59,
+              //                   999,
+              //                 ),
+              //                 limit: 31,
+              //               );
+              //         }
+              //         ref
+              //             .read(diaryListProvider.notifier)
+              //             .fetchPostedMonths(userId: userId!);
+              //       },
+              //       child: Container(
+              //         padding: const EdgeInsets.symmetric(
+              //           horizontal: 12,
+              //           vertical: 6,
+              //         ),
+              //         decoration: BoxDecoration(
+              //           color: AppColors.mainColor.withAlpha(
+              //             (0.08 * 255).toInt(),
+              //           ),
+              //           borderRadius: BorderRadius.circular(20),
+              //         ),
+              //         child: const Icon(
+              //           Icons.settings,
+              //           color: AppColors.mainColor,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
