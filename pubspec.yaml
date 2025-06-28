@@ -1,5 +1,5 @@
 name: kiwi
-description: "A new Flutter project."
+description: "KIWI - Beautiful English diary app with secure cloud sync, monthly navigation, and Google authentication. Built with Flutter and Supabase."
 publish_to: 'none'
 version: 1.0.0+1
 
