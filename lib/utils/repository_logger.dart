@@ -1,4 +1,4 @@
-import 'package:english_diary_app/utils/logger_utils.dart';
+import 'package:kiwi/utils/logger_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -9,11 +9,13 @@ Future<T> logRequestResponse<T>(
 }) async {
   try {
     if (kDebugMode) {
-      AppLogger.d('[$label][request]${requestDetail != null ? ' $requestDetail' : ''}');
+      AppLogger.d(
+        '[$label][request]${requestDetail != null ? ' $requestDetail' : ''}',
+      );
     }
     final res = await action();
     if (kDebugMode) {
-        AppLogger.d('[$label][response] $res');
+      AppLogger.d('[$label][response] $res');
     }
     return res;
   } catch (e, st) {
@@ -33,7 +35,9 @@ Future<void> logRequestResponseVoid(
 }) async {
   try {
     if (kDebugMode) {
-      AppLogger.d('[$label][request]${requestDetail != null ? ' $requestDetail' : ''}');
+      AppLogger.d(
+        '[$label][request]${requestDetail != null ? ' $requestDetail' : ''}',
+      );
     }
     await action();
     if (kDebugMode) {

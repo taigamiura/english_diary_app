@@ -1,0 +1,28 @@
+# Global owners - all files
+* @miurataiga
+
+# Core application files
+/lib/ @miurataiga
+/test/ @miurataiga
+
+# Configuration files
+*.yaml @miurataiga
+*.yml @miurataiga
+pubspec.* @miurataiga
+
+# CI/CD workflows
+/.github/ @miurataiga
+
+# Documentation
+/docs/ @miurataiga
+README.md @miurataiga
+
+# Android specific
+/android/ @miurataiga
+
+# iOS specific
+/ios/ @miurataiga
+
+# Dependencies and security
+pubspec.lock @miurataiga
+/.github/dependabot.yml @miurataiga

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'welcome_page.dart';
-import 'package:english_diary_app/constants/app_strings.dart';
+import 'package:kiwi/constants/app_strings.dart';
 
 class ErrorPage extends StatelessWidget {
   final Object error;
@@ -22,7 +22,10 @@ class ErrorPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   AppStrings.appInitFailed,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(

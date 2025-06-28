@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/global_state_provider.dart';
-import '../models/plan_model.dart';
-import '../services/plan_service.dart';
-import '../repositories/plan_repository.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
+import 'package:kiwi/providers/global_state_provider.dart';
+import 'package:kiwi/models/plan_model.dart';
+import 'package:kiwi/services/plan_service.dart';
+import 'package:kiwi/repositories/plan_repository.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
 
-final planRepositoryProvider = Provider<PlanRepository>((ref) => PlanRepository());
+final planRepositoryProvider = Provider<PlanRepository>(
+  (ref) => PlanRepository(),
+);
 
 final planServiceProvider = Provider<PlanService>((ref) {
   final repository = ref.read(planRepositoryProvider);
@@ -23,11 +25,7 @@ class PlanListState {
     this.error,
   });
 
-  PlanListState copyWith({
-    List<Plan>? items,
-    bool? isLoading,
-    String? error,
-  }) {
+  PlanListState copyWith({List<Plan>? items, bool? isLoading, String? error}) {
     return PlanListState(
       items: items ?? this.items,
       isLoading: isLoading ?? this.isLoading,
@@ -36,9 +34,10 @@ class PlanListState {
   }
 }
 
-final planListProvider = StateNotifierProvider.autoDispose<PlanListNotifier, PlanListState>(
-  (ref) => PlanListNotifier(ref),
-);
+final planListProvider =
+    StateNotifierProvider.autoDispose<PlanListNotifier, PlanListState>(
+      (ref) => PlanListNotifier(ref),
+    );
 
 class PlanListNotifier extends StateNotifier<PlanListState> {
   final Ref ref;
@@ -55,7 +54,10 @@ class PlanListNotifier extends StateNotifier<PlanListState> {
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -72,7 +74,10 @@ class PlanListNotifier extends StateNotifier<PlanListState> {
       state = state.copyWith(items: [...state.items, plan], isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -86,11 +91,15 @@ class PlanListNotifier extends StateNotifier<PlanListState> {
     try {
       final service = ref.read(planServiceProvider);
       await service.updatePlan(updated.id, updated);
-      final newItems = state.items.map((p) => p.id == updated.id ? updated : p).toList();
+      final newItems =
+          state.items.map((p) => p.id == updated.id ? updated : p).toList();
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -108,7 +117,10 @@ class PlanListNotifier extends StateNotifier<PlanListState> {
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }

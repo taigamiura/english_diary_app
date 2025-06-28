@@ -1,6 +1,5 @@
-import 'package:english_diary_app/repositories/plan_repository.dart';
-
-import '../models/plan_model.dart';
+import 'package:kiwi/repositories/plan_repository.dart';
+import 'package:kiwi/models/plan_model.dart';
 
 abstract class PlanService {
   Future<List<Plan>> fetchPlans();

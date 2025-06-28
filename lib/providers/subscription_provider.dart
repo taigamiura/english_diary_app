@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/providers/global_state_provider.dart';
-import '../models/subscription_model.dart';
-import '../services/subscription_service.dart';
-import '../repositories/subscription_repository.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
+import 'package:kiwi/providers/global_state_provider.dart';
+import 'package:kiwi/models/subscription_model.dart';
+import 'package:kiwi/services/subscription_service.dart';
+import 'package:kiwi/repositories/subscription_repository.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
 
-final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) => SubscriptionRepository());
+final subscriptionRepositoryProvider = Provider<SubscriptionRepository>(
+  (ref) => SubscriptionRepository(),
+);
 
 final subscriptionServiceProvider = Provider<SubscriptionService>((ref) {
   final repository = ref.read(subscriptionRepositoryProvider);
@@ -36,9 +38,10 @@ class SubscriptionListState {
   }
 }
 
-final subscriptionListProvider = StateNotifierProvider.autoDispose<SubscriptionListNotifier, SubscriptionListState>(
-  (ref) => SubscriptionListNotifier(ref),
-);
+final subscriptionListProvider = StateNotifierProvider.autoDispose<
+  SubscriptionListNotifier,
+  SubscriptionListState
+>((ref) => SubscriptionListNotifier(ref));
 
 class SubscriptionListNotifier extends StateNotifier<SubscriptionListState> {
   final Ref ref;
@@ -55,7 +58,10 @@ class SubscriptionListNotifier extends StateNotifier<SubscriptionListState> {
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -69,10 +75,16 @@ class SubscriptionListNotifier extends StateNotifier<SubscriptionListState> {
     try {
       final service = ref.read(subscriptionServiceProvider);
       await service.insertSubscription(subscription);
-      state = state.copyWith(items: [...state.items, subscription], isLoading: false);
+      state = state.copyWith(
+        items: [...state.items, subscription],
+        isLoading: false,
+      );
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -86,11 +98,15 @@ class SubscriptionListNotifier extends StateNotifier<SubscriptionListState> {
     try {
       final service = ref.read(subscriptionServiceProvider);
       await service.updateSubscription(updated.id, updated);
-      final newItems = state.items.map((s) => s.id == updated.id ? updated : s).toList();
+      final newItems =
+          state.items.map((s) => s.id == updated.id ? updated : s).toList();
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -108,7 +124,10 @@ class SubscriptionListNotifier extends StateNotifier<SubscriptionListState> {
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }

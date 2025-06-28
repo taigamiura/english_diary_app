@@ -1,12 +1,14 @@
-import '../repositories/payment_repository.dart';
-import '../services/payment_service.dart';
-import '../models/payment_model.dart';
+import 'package:kiwi/repositories/payment_repository.dart';
+import 'package:kiwi/services/payment_service.dart';
+import 'package:kiwi/models/payment_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
-import 'package:english_diary_app/providers/global_state_provider.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
+import 'package:kiwi/providers/global_state_provider.dart';
 
 // Repository Provider
-final paymentRepositoryProvider = Provider<PaymentRepository>((ref) => PaymentRepository());
+final paymentRepositoryProvider = Provider<PaymentRepository>(
+  (ref) => PaymentRepository(),
+);
 // Service Provider
 final paymentServiceProvider = Provider<PaymentService>((ref) {
   final repository = ref.read(paymentRepositoryProvider);
@@ -37,9 +39,10 @@ class PaymentListState {
   }
 }
 
-final paymentListProvider = StateNotifierProvider.autoDispose<PaymentListNotifier, PaymentListState>(
-  (ref) => PaymentListNotifier(ref),
-);
+final paymentListProvider =
+    StateNotifierProvider.autoDispose<PaymentListNotifier, PaymentListState>(
+      (ref) => PaymentListNotifier(ref),
+    );
 
 class PaymentListNotifier extends StateNotifier<PaymentListState> {
   final Ref ref;
@@ -56,7 +59,10 @@ class PaymentListNotifier extends StateNotifier<PaymentListState> {
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -70,10 +76,16 @@ class PaymentListNotifier extends StateNotifier<PaymentListState> {
     try {
       final service = ref.read(paymentServiceProvider);
       await service.insertPayment(payment);
-      state = state.copyWith(items: [...state.items, payment], isLoading: false);
+      state = state.copyWith(
+        items: [...state.items, payment],
+        isLoading: false,
+      );
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -87,11 +99,15 @@ class PaymentListNotifier extends StateNotifier<PaymentListState> {
     try {
       final service = ref.read(paymentServiceProvider);
       await service.updatePayment(updated.id, updated);
-      final newItems = state.items.map((p) => p.id == updated.id ? updated : p).toList();
+      final newItems =
+          state.items.map((p) => p.id == updated.id ? updated : p).toList();
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -109,7 +125,10 @@ class PaymentListNotifier extends StateNotifier<PaymentListState> {
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }

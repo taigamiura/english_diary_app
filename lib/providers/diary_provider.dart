@@ -3,12 +3,14 @@ import '../services/diary_service.dart';
 import '../models/diary_model.dart';
 import '../models/year_month.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
-import 'package:english_diary_app/providers/global_state_provider.dart';
-import 'package:english_diary_app/providers/auth_provider.dart';
+import 'package:kiwi/utils/utils.dart' as utils;
+import 'package:kiwi/providers/global_state_provider.dart';
+import 'package:kiwi/providers/auth_provider.dart';
 
 // Repository Provider
-final diaryRepositoryProvider = Provider<DiaryRepository>((ref) => DiaryRepository());
+final diaryRepositoryProvider = Provider<DiaryRepository>(
+  (ref) => DiaryRepository(),
+);
 
 // Service Provider
 final diaryServiceProvider = Provider<DiaryService>((ref) {
@@ -52,15 +54,21 @@ class DiaryListState {
   }
 }
 
-final diaryListProvider = StateNotifierProvider.autoDispose<DiaryListNotifier, DiaryListState>(
-  (ref) => DiaryListNotifier(ref),
-);
+final diaryListProvider =
+    StateNotifierProvider.autoDispose<DiaryListNotifier, DiaryListState>(
+      (ref) => DiaryListNotifier(ref),
+    );
 
 class DiaryListNotifier extends StateNotifier<DiaryListState> {
   final Ref ref;
   DiaryListNotifier(this.ref) : super(const DiaryListState());
 
-  Future<void> fetchDiaries({required String userId, DateTime? from, DateTime? to, required int limit}) async {
+  Future<void> fetchDiaries({
+    required String userId,
+    DateTime? from,
+    DateTime? to,
+    required int limit,
+  }) async {
     final loading = ref.read(globalLoadingProvider.notifier);
     final error = ref.read(globalErrorProvider.notifier);
     loading.state = true;
@@ -70,17 +78,21 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
       final items = await service.fetchDiaries(
         userId: userId,
         from: from ?? DateTime(2000, 1, 1), // 2000年1月1日をデフォルト開始日とする
-        to: to ?? DateTime.now(),           // デフォルト終了日は現在日時
-        limit: limit,                 // デフォルトは30件
+        to: to ?? DateTime.now(), // デフォルト終了日は現在日時
+        limit: limit, // デフォルトは30件
       );
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
   }
+
   Future<void> fetchDateDiary({required String userId}) async {
     final loading = ref.read(globalLoadingProvider.notifier);
     final error = ref.read(globalErrorProvider.notifier);
@@ -89,7 +101,12 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
     try {
       final service = ref.read(diaryServiceProvider);
       final today = DateTime.now();
-      final item = await service.fetchDiaries(userId: userId, from: today, to: today, limit: 1);
+      final item = await service.fetchDiaries(
+        userId: userId,
+        from: today,
+        to: today,
+        limit: 1,
+      );
       final hasTodayDiary = item.isNotEmpty;
       state = state.copyWith(
         items: item,
@@ -98,11 +115,15 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
       );
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
   }
+
   Future<void> fetchPostedMonths({required String userId}) async {
     final loading = ref.read(globalLoadingProvider.notifier);
     final error = ref.read(globalErrorProvider.notifier);
@@ -111,12 +132,15 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
     try {
       final service = ref.read(diaryServiceProvider);
       final months = await service.fetchPostedMonths(userId: userId);
-      final uniqueSortedMonths = months.toSet().toList()
-        ..sort((a, b) => b.compareTo(a));
+      final uniqueSortedMonths =
+          months.toSet().toList()..sort((a, b) => b.compareTo(a));
       state = state.copyWith(months: uniqueSortedMonths, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -133,7 +157,10 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
       state = state.copyWith(averageTextInput: average, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -168,7 +195,10 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
       state = state.copyWith(items: [...state.items, diary], isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -205,7 +235,10 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }
@@ -223,7 +256,10 @@ class DiaryListNotifier extends StateNotifier<DiaryListState> {
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
       error.state = utils.friendlyErrorMessage(e);
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     } finally {
       loading.state = false;
     }

@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="english_diary_app"
+        android:label="KIWI"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <!-- Google Sign-In 用の設定 -->
         <meta-data
             android:name="com.google.android.gms.auth.api.signin.CLIENT_ID"
-            android:value="***REMOVED***" />
+            android:value="88982548673-qhepeatmr4fl1hd1hcto31m256qc71mm.apps.googleusercontent.com" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

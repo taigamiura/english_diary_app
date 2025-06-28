@@ -2,10 +2,12 @@ import '../repositories/profile_repository.dart';
 import '../services/user_service.dart';
 import '../models/profile_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_diary_app/utils/utils.dart' as utils;
+import 'package:kiwi/utils/utils.dart' as utils;
 
 // Repository Provider
-final profileRepositoryProvider = Provider<ProfileRepository>((ref) => ProfileRepository());
+final profileRepositoryProvider = Provider<ProfileRepository>(
+  (ref) => ProfileRepository(),
+);
 // Service Provider
 final userServiceProvider = Provider<UserService>((ref) {
   final repository = ref.read(profileRepositoryProvider);
@@ -52,7 +54,10 @@ class UserListNotifier extends StateNotifier<UserListState> {
       final items = await service.fetchUsers();
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     }
   }
 
@@ -61,9 +66,15 @@ class UserListNotifier extends StateNotifier<UserListState> {
     try {
       final service = ref.read(userServiceProvider);
       await service.insertUser(profile);
-      state = state.copyWith(items: [...state.items, profile], isLoading: false);
+      state = state.copyWith(
+        items: [...state.items, profile],
+        isLoading: false,
+      );
     } catch (e) {
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     }
   }
 
@@ -72,10 +83,14 @@ class UserListNotifier extends StateNotifier<UserListState> {
     try {
       final service = ref.read(userServiceProvider);
       await service.updateUser(updated.id, updated);
-      final newItems = state.items.map((u) => u.id == updated.id ? updated : u).toList();
+      final newItems =
+          state.items.map((u) => u.id == updated.id ? updated : u).toList();
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     }
   }
 
@@ -87,7 +102,10 @@ class UserListNotifier extends StateNotifier<UserListState> {
       final newItems = state.items.where((u) => u.id != id).toList();
       state = state.copyWith(items: newItems, isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: utils.friendlyErrorMessage(e), isLoading: false);
+      state = state.copyWith(
+        error: utils.friendlyErrorMessage(e),
+        isLoading: false,
+      );
     }
   }
 }

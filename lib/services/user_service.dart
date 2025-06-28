@@ -1,6 +1,5 @@
-import 'package:english_diary_app/repositories/profile_repository.dart';
-
-import '../models/profile_model.dart';
+import 'package:kiwi/repositories/profile_repository.dart';
+import 'package:kiwi/models/profile_model.dart';
 
 abstract class UserService {
   Future<Profile?> fetchUser(String id);

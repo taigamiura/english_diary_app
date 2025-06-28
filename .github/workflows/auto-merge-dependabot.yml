@@ -6,8 +6,10 @@ on:
       - labeled
       - opened
       - synchronize
+      - ready_for_review
     branches:
-      - development
+      - main
+      - develop
 
 jobs:
   automerge:
@@ -15,8 +17,54 @@ jobs:
       github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
     runs-on: ubuntu-latest
     steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 Get PR metadata
+        id: pr-metadata
+        run: |
+          echo "pr-title=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+          echo "pr-labels=${{ join(github.event.pull_request.labels.*.name, ',') }}" >> $GITHUB_OUTPUT
+
+      - name: 🚨 Check for security updates
+        id: security-check
+        run: |
+          if [[ "${{ steps.pr-metadata.outputs.pr-title }}" =~ (security|vulnerability|CVE) ]] || \
+             [[ "${{ steps.pr-metadata.outputs.pr-labels }}" =~ security ]]; then
+            echo "is-security=true" >> $GITHUB_OUTPUT
+            echo "🚨 Security update detected"
+          else
+            echo "is-security=false" >> $GITHUB_OUTPUT
+            echo "📦 Regular dependency update"
+          fi
+
       - name: 🔄 Enable auto-merge for Dependabot PR
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: squash
+          pull-request-number: ${{ github.event.pull_request.number }}
+
+      - name: 🏷️ Add priority label for security updates
+        if: steps.security-check.outputs.is-security == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['priority: high', 'security']
+            });
+
+      - name: 💬 Comment on security PR
+        if: steps.security-check.outputs.is-security == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '🚨 **セキュリティアップデート検出** \n\nこのPRはセキュリティ関連の依存関係更新を含んでいます。テストが通過次第、自動的にマージされます。'
+            });

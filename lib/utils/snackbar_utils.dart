@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:english_diary_app/constants/app_colors.dart';
+import 'package:kiwi/constants/app_colors.dart';
 
 void showErrorSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).clearSnackBars();
